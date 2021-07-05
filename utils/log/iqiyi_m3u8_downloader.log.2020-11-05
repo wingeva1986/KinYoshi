@@ -1,0 +1,1220 @@
+[2020-11-05 10:01:18,756 download.py][line:47] [18784-MainThread-23796:] INFO     download url https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819668AA1AF36FFA43729D49E5BEFE91C0E4C371FD232FB171599A9C451B8825226C21675D00FE8DC6400B75427F2452B84ECCC85E48E597F2EB149486AF5F020C9F324A3E77A4B049AAE15429C974C157E.m3u8
+[2020-11-05 10:01:18,757 download.py][line:55] [18784-MainThread-23796:] INFO     headers -> {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.67 Safari/537.36'}
+[2020-11-05 10:01:18,757 download.py][line:58] [18784-MainThread-23796:] INFO     download E:\YunBo\4.mp4 output_dir=E:\YunBo
+[2020-11-05 10:01:22,530 m3u8_downloader.py][line:54] [18784-MainThread-1380890981944:] INFO     创建文件夹: E:\YunBo\4.mp4文件夹
+[2020-11-05 10:01:22,530 m3u8_downloader.py][line:69] [18784-MainThread-1380890981944:] INFO     下载keys: {None}
+[2020-11-05 10:02:25,720 m3u8_downloader.py][line:138] [18784-ThreadPoolExecutor-0_6-1380907394920:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8195970D5BDF8633E2A2E5CE50DE99495A08E1936E58E4BDD2A31403746BC32AB4DDC5FF967C15AD6CE7A5A10F07C64B921A87B4C2BD2149BE732EBB5CE9B5E9D6EF324A3E77A4B049AAE15429C974C157E.ts, 7, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:02:25,815 m3u8_downloader.py][line:138] [18784-ThreadPoolExecutor-0_2-1380907394312:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8199250548499F33F876D431B3FB1A2BB509BB7641E6B1FE0284E5BB0C96B400FA1B7D09984A417D2EF775D450D3DC74C6E682ABBD050679C335F33B8970E7F5515F324A3E77A4B049AAE15429C974C157E.ts, 3, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:02:25,818 m3u8_downloader.py][line:138] [18784-ThreadPoolExecutor-0_7-1380907395072:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8190168C795BFF93FB1AA10B76DF123CDB3BAE63B273730690CFCFE812CEA8E0FDCCB17F84ECBD972820BA3FA42BF3F37F240A0B28F1A00A958247C41898DA808D3F324A3E77A4B049AAE15429C974C157E.ts, 8, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:02:25,821 m3u8_downloader.py][line:138] [18784-ThreadPoolExecutor-0_8-1380907395224:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819EBD344667F11FF9D1D1A7D14ADE3CCB2A0F00E3CEC90DB331F3F971F2A00301F5C7F4CF7C1EB288ADBE592164AF315FE6AA90B50FBB2C3E89248E08120783D2FF324A3E77A4B049AAE15429C974C157E.ts, 9, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:02:28,716 m3u8_downloader.py][line:138] [18784-ThreadPoolExecutor-0_3-1380907394464:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8193374D8E73C15B1C1742A8882E83499CB8FECDC2680460D3EA056EA5960B3006563DA205F58A35B49CC671AE851B1F039973F7EBBA21B890EE7EB77A6D55B7BABF324A3E77A4B049AAE15429C974C157E.ts, 4, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:02:28,719 m3u8_downloader.py][line:138] [18784-ThreadPoolExecutor-0_1-1380907393552:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819724847998EFF2FB4DABD9C29F1D0407445355D851A9BC9F33CA65D62F621DE3104D0DA227A63C821E042C30765E6FB7137375F8ABBBED6A140BD2B2AD9827893F324A3E77A4B049AAE15429C974C157E.ts, 2, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:02:28,722 m3u8_downloader.py][line:138] [18784-ThreadPoolExecutor-0_0-1380907394160:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819084D5143729E0EF9A24C6DAD09EB51D3331497EAFF3B4399886D546DAEC6B2890A8197790952059AC2B7427571EEE875BDCDC7770F524A0A471F0B1C2E85E5EBF324A3E77A4B049AAE15429C974C157E.ts, 1, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:02:28,730 m3u8_downloader.py][line:138] [18784-ThreadPoolExecutor-0_5-1380907394768:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8196DB748F28A00316C47A00C566CCA61862674297BFECD2199CA87AB6658A4BEC811571F47313E81935F248D01DD7E14FF5F3A9F01B04B10A47C0EAFDB1FBCFC06F324A3E77A4B049AAE15429C974C157E.ts, 6, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:02:28,732 m3u8_downloader.py][line:138] [18784-ThreadPoolExecutor-0_9-1380907395376:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819C69401B7AF0795BB84A2BAC72F1452DD14C2E38501D7D404DD17A2F99B6D2E5B455CE726CE19EC1BDFCFFCC0D4656CBB797EDD845AE8F056132105CB7BD84677F324A3E77A4B049AAE15429C974C157E.ts, 10, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:02:34,722 m3u8_downloader.py][line:138] [18784-ThreadPoolExecutor-0_4-1380907394616:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819F6D906260A7922539C52C2AB63BE6670B009B812E3593AD6CB6F45A53907E51BA69181F199BA91DFDBBF32CF3ACC050B95C373F1B03BC70CEE5DDBD9AFDE4E36F324A3E77A4B049AAE15429C974C157E.ts, 5, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:03:23,997 download.py][line:47] [21052-MainThread-23180:] INFO     download url https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819668AA1AF36FFA43729D49E5BEFE91C0E4C371FD232FB171599A9C451B8825226C21675D00FE8DC6400B75427F2452B84ECCC85E48E597F2EB149486AF5F020C9F324A3E77A4B049AAE15429C974C157E.m3u8
+[2020-11-05 10:03:23,997 download.py][line:55] [21052-MainThread-23180:] INFO     headers -> {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.67 Safari/537.36'}
+[2020-11-05 10:03:23,997 download.py][line:58] [21052-MainThread-23180:] INFO     download E:\YunBo\4.mp4 output_dir=E:\YunBo
+[2020-11-05 10:03:27,262 m3u8_downloader.py][line:54] [21052-MainThread-2333670712888:] INFO     创建文件夹: E:\YunBo\4.mp4文件夹
+[2020-11-05 10:03:27,262 m3u8_downloader.py][line:69] [21052-MainThread-2333670712888:] INFO     下载keys: {None}
+[2020-11-05 10:04:30,449 m3u8_downloader.py][line:138] [21052-ThreadPoolExecutor-0_0-2333687125104:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819084D5143729E0EF9A24C6DAD09EB51D3331497EAFF3B4399886D546DAEC6B2890A8197790952059AC2B7427571EEE875BDCDC7770F524A0A471F0B1C2E85E5EBF324A3E77A4B049AAE15429C974C157E.ts, 1, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:04:30,457 m3u8_downloader.py][line:138] [21052-ThreadPoolExecutor-0_1-2333687124496:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819724847998EFF2FB4DABD9C29F1D0407445355D851A9BC9F33CA65D62F621DE3104D0DA227A63C821E042C30765E6FB7137375F8ABBBED6A140BD2B2AD9827893F324A3E77A4B049AAE15429C974C157E.ts, 2, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:04:30,461 m3u8_downloader.py][line:138] [21052-ThreadPoolExecutor-0_2-2333687125256:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8199250548499F33F876D431B3FB1A2BB509BB7641E6B1FE0284E5BB0C96B400FA1B7D09984A417D2EF775D450D3DC74C6E682ABBD050679C335F33B8970E7F5515F324A3E77A4B049AAE15429C974C157E.ts, 3, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:04:30,463 m3u8_downloader.py][line:138] [21052-ThreadPoolExecutor-0_3-2333687125408:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8193374D8E73C15B1C1742A8882E83499CB8FECDC2680460D3EA056EA5960B3006563DA205F58A35B49CC671AE851B1F039973F7EBBA21B890EE7EB77A6D55B7BABF324A3E77A4B049AAE15429C974C157E.ts, 4, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:04:30,466 m3u8_downloader.py][line:138] [21052-ThreadPoolExecutor-0_4-2333687125560:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819F6D906260A7922539C52C2AB63BE6670B009B812E3593AD6CB6F45A53907E51BA69181F199BA91DFDBBF32CF3ACC050B95C373F1B03BC70CEE5DDBD9AFDE4E36F324A3E77A4B049AAE15429C974C157E.ts, 5, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:04:30,468 m3u8_downloader.py][line:138] [21052-ThreadPoolExecutor-0_7-2333687126016:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8190168C795BFF93FB1AA10B76DF123CDB3BAE63B273730690CFCFE812CEA8E0FDCCB17F84ECBD972820BA3FA42BF3F37F240A0B28F1A00A958247C41898DA808D3F324A3E77A4B049AAE15429C974C157E.ts, 8, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:04:30,471 m3u8_downloader.py][line:138] [21052-ThreadPoolExecutor-0_8-2333687126168:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819EBD344667F11FF9D1D1A7D14ADE3CCB2A0F00E3CEC90DB331F3F971F2A00301F5C7F4CF7C1EB288ADBE592164AF315FE6AA90B50FBB2C3E89248E08120783D2FF324A3E77A4B049AAE15429C974C157E.ts, 9, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:04:30,474 m3u8_downloader.py][line:138] [21052-ThreadPoolExecutor-0_5-2333687125712:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8196DB748F28A00316C47A00C566CCA61862674297BFECD2199CA87AB6658A4BEC811571F47313E81935F248D01DD7E14FF5F3A9F01B04B10A47C0EAFDB1FBCFC06F324A3E77A4B049AAE15429C974C157E.ts, 6, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:04:30,476 m3u8_downloader.py][line:138] [21052-ThreadPoolExecutor-0_6-2333687125864:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8195970D5BDF8633E2A2E5CE50DE99495A08E1936E58E4BDD2A31403746BC32AB4DDC5FF967C15AD6CE7A5A10F07C64B921A87B4C2BD2149BE732EBB5CE9B5E9D6EF324A3E77A4B049AAE15429C974C157E.ts, 7, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:04:30,478 m3u8_downloader.py][line:138] [21052-ThreadPoolExecutor-0_9-2333687126320:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819C69401B7AF0795BB84A2BAC72F1452DD14C2E38501D7D404DD17A2F99B6D2E5B455CE726CE19EC1BDFCFFCC0D4656CBB797EDD845AE8F056132105CB7BD84677F324A3E77A4B049AAE15429C974C157E.ts, 10, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:05:22,541 download.py][line:47] [15424-MainThread-19724:] INFO     download url https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819668AA1AF36FFA43729D49E5BEFE91C0E4C371FD232FB171599A9C451B8825226C21675D00FE8DC6400B75427F2452B84ECCC85E48E597F2EB149486AF5F020C9F324A3E77A4B049AAE15429C974C157E.m3u8
+[2020-11-05 10:05:22,542 download.py][line:55] [15424-MainThread-19724:] INFO     headers -> {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.67 Safari/537.36'}
+[2020-11-05 10:05:22,542 download.py][line:58] [15424-MainThread-19724:] INFO     download E:\YunBo\4.mp4 output_dir=E:\YunBo
+[2020-11-05 10:05:27,941 m3u8_downloader.py][line:54] [15424-MainThread-1717519001144:] INFO     创建文件夹: E:\YunBo\4.mp4文件夹
+[2020-11-05 10:05:27,941 m3u8_downloader.py][line:69] [15424-MainThread-1717519001144:] INFO     下载keys: {None}
+[2020-11-05 10:06:31,125 m3u8_downloader.py][line:138] [15424-ThreadPoolExecutor-0_2-1717535474952:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8199250548499F33F876D431B3FB1A2BB509BB7641E6B1FE0284E5BB0C96B400FA1B7D09984A417D2EF775D450D3DC74C6E682ABBD050679C335F33B8970E7F5515F324A3E77A4B049AAE15429C974C157E.ts, 3, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:06:31,133 m3u8_downloader.py][line:138] [15424-ThreadPoolExecutor-0_0-1717535474800:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819084D5143729E0EF9A24C6DAD09EB51D3331497EAFF3B4399886D546DAEC6B2890A8197790952059AC2B7427571EEE875BDCDC7770F524A0A471F0B1C2E85E5EBF324A3E77A4B049AAE15429C974C157E.ts, 1, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:06:31,135 m3u8_downloader.py][line:138] [15424-ThreadPoolExecutor-0_1-1717535474192:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819724847998EFF2FB4DABD9C29F1D0407445355D851A9BC9F33CA65D62F621DE3104D0DA227A63C821E042C30765E6FB7137375F8ABBBED6A140BD2B2AD9827893F324A3E77A4B049AAE15429C974C157E.ts, 2, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:06:31,142 m3u8_downloader.py][line:138] [15424-ThreadPoolExecutor-0_7-1717535475712:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8190168C795BFF93FB1AA10B76DF123CDB3BAE63B273730690CFCFE812CEA8E0FDCCB17F84ECBD972820BA3FA42BF3F37F240A0B28F1A00A958247C41898DA808D3F324A3E77A4B049AAE15429C974C157E.ts, 8, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:06:31,144 m3u8_downloader.py][line:138] [15424-ThreadPoolExecutor-0_4-1717535475256:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819F6D906260A7922539C52C2AB63BE6670B009B812E3593AD6CB6F45A53907E51BA69181F199BA91DFDBBF32CF3ACC050B95C373F1B03BC70CEE5DDBD9AFDE4E36F324A3E77A4B049AAE15429C974C157E.ts, 5, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:06:31,151 m3u8_downloader.py][line:138] [15424-ThreadPoolExecutor-0_8-1717535475864:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819EBD344667F11FF9D1D1A7D14ADE3CCB2A0F00E3CEC90DB331F3F971F2A00301F5C7F4CF7C1EB288ADBE592164AF315FE6AA90B50FBB2C3E89248E08120783D2FF324A3E77A4B049AAE15429C974C157E.ts, 9, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:06:34,138 m3u8_downloader.py][line:138] [15424-ThreadPoolExecutor-0_6-1717535475560:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8195970D5BDF8633E2A2E5CE50DE99495A08E1936E58E4BDD2A31403746BC32AB4DDC5FF967C15AD6CE7A5A10F07C64B921A87B4C2BD2149BE732EBB5CE9B5E9D6EF324A3E77A4B049AAE15429C974C157E.ts, 7, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:06:34,149 m3u8_downloader.py][line:138] [15424-ThreadPoolExecutor-0_9-1717535476016:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819C69401B7AF0795BB84A2BAC72F1452DD14C2E38501D7D404DD17A2F99B6D2E5B455CE726CE19EC1BDFCFFCC0D4656CBB797EDD845AE8F056132105CB7BD84677F324A3E77A4B049AAE15429C974C157E.ts, 10, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:06:40,149 m3u8_downloader.py][line:138] [15424-ThreadPoolExecutor-0_3-1717535475104:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8193374D8E73C15B1C1742A8882E83499CB8FECDC2680460D3EA056EA5960B3006563DA205F58A35B49CC671AE851B1F039973F7EBBA21B890EE7EB77A6D55B7BABF324A3E77A4B049AAE15429C974C157E.ts, 4, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:06:40,152 m3u8_downloader.py][line:138] [15424-ThreadPoolExecutor-0_5-1717535475408:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8196DB748F28A00316C47A00C566CCA61862674297BFECD2199CA87AB6658A4BEC811571F47313E81935F248D01DD7E14FF5F3A9F01B04B10A47C0EAFDB1FBCFC06F324A3E77A4B049AAE15429C974C157E.ts, 6, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:08:59,290 download.py][line:47] [22056-MainThread-14420:] INFO     download url https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819668AA1AF36FFA43729D49E5BEFE91C0E4C371FD232FB171599A9C451B8825226C21675D00FE8DC6400B75427F2452B84ECCC85E48E597F2EB149486AF5F020C9F324A3E77A4B049AAE15429C974C157E.m3u8
+[2020-11-05 10:08:59,290 download.py][line:55] [22056-MainThread-14420:] INFO     headers -> {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.67 Safari/537.36'}
+[2020-11-05 10:08:59,290 download.py][line:58] [22056-MainThread-14420:] INFO     download E:\YunBo\4.mp4 output_dir=E:\YunBo
+[2020-11-05 10:09:01,225 m3u8_downloader.py][line:54] [22056-MainThread-2244370708024:] INFO     创建文件夹: E:\YunBo\4.mp4文件夹
+[2020-11-05 10:09:01,226 m3u8_downloader.py][line:69] [22056-MainThread-2244370708024:] INFO     下载keys: {None}
+[2020-11-05 10:10:04,415 m3u8_downloader.py][line:138] [22056-ThreadPoolExecutor-0_3-2244387120544:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8193374D8E73C15B1C1742A8882E83499CB8FECDC2680460D3EA056EA5960B3006563DA205F58A35B49CC671AE851B1F039973F7EBBA21B890EE7EB77A6D55B7BABF324A3E77A4B049AAE15429C974C157E.ts, 4, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:10:04,423 m3u8_downloader.py][line:138] [22056-ThreadPoolExecutor-0_0-2244387120240:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819084D5143729E0EF9A24C6DAD09EB51D3331497EAFF3B4399886D546DAEC6B2890A8197790952059AC2B7427571EEE875BDCDC7770F524A0A471F0B1C2E85E5EBF324A3E77A4B049AAE15429C974C157E.ts, 1, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:10:04,426 m3u8_downloader.py][line:138] [22056-ThreadPoolExecutor-0_9-2244387121456:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819C69401B7AF0795BB84A2BAC72F1452DD14C2E38501D7D404DD17A2F99B6D2E5B455CE726CE19EC1BDFCFFCC0D4656CBB797EDD845AE8F056132105CB7BD84677F324A3E77A4B049AAE15429C974C157E.ts, 10, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:10:04,429 m3u8_downloader.py][line:138] [22056-ThreadPoolExecutor-0_2-2244387120392:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8199250548499F33F876D431B3FB1A2BB509BB7641E6B1FE0284E5BB0C96B400FA1B7D09984A417D2EF775D450D3DC74C6E682ABBD050679C335F33B8970E7F5515F324A3E77A4B049AAE15429C974C157E.ts, 3, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:10:04,431 m3u8_downloader.py][line:138] [22056-ThreadPoolExecutor-0_8-2244387121304:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819EBD344667F11FF9D1D1A7D14ADE3CCB2A0F00E3CEC90DB331F3F971F2A00301F5C7F4CF7C1EB288ADBE592164AF315FE6AA90B50FBB2C3E89248E08120783D2FF324A3E77A4B049AAE15429C974C157E.ts, 9, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:10:04,434 m3u8_downloader.py][line:138] [22056-ThreadPoolExecutor-0_4-2244387120696:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819F6D906260A7922539C52C2AB63BE6670B009B812E3593AD6CB6F45A53907E51BA69181F199BA91DFDBBF32CF3ACC050B95C373F1B03BC70CEE5DDBD9AFDE4E36F324A3E77A4B049AAE15429C974C157E.ts, 5, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:10:04,451 m3u8_downloader.py][line:138] [22056-ThreadPoolExecutor-0_5-2244387120848:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8196DB748F28A00316C47A00C566CCA61862674297BFECD2199CA87AB6658A4BEC811571F47313E81935F248D01DD7E14FF5F3A9F01B04B10A47C0EAFDB1FBCFC06F324A3E77A4B049AAE15429C974C157E.ts, 6, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:10:04,455 m3u8_downloader.py][line:138] [22056-ThreadPoolExecutor-0_6-2244387121000:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8195970D5BDF8633E2A2E5CE50DE99495A08E1936E58E4BDD2A31403746BC32AB4DDC5FF967C15AD6CE7A5A10F07C64B921A87B4C2BD2149BE732EBB5CE9B5E9D6EF324A3E77A4B049AAE15429C974C157E.ts, 7, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:10:04,457 m3u8_downloader.py][line:138] [22056-ThreadPoolExecutor-0_1-2244387119632:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F819724847998EFF2FB4DABD9C29F1D0407445355D851A9BC9F33CA65D62F621DE3104D0DA227A63C821E042C30765E6FB7137375F8ABBBED6A140BD2B2AD9827893F324A3E77A4B049AAE15429C974C157E.ts, 2, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded
+[2020-11-05 10:10:04,460 m3u8_downloader.py][line:138] [22056-ThreadPoolExecutor-0_7-2244387121152:] ERROR    下载异常: https://bde4.com/F3DC3DBAE3D9C51191AFADC53565F8190168C795BFF93FB1AA10B76DF123CDB3BAE63B273730690CFCFE812CEA8E0FDCCB17F84ECBD972820BA3FA42BF3F37F240A0B28F1A00A958247C41898DA808D3F324A3E77A4B049AAE15429C974C157E.ts, 8, maximum recursion depth exceeded
+Traceback (most recent call last):
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 133, in _download
+    self.__download(url, failure_path, key, chunk_size)
+  File "D:\KinYoshi\Python\utils\m3u8_downloader.py", line 156, in __download
+    'get', url, headers=headers, timeout=30).content
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python36\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python36\lib\site-packages\requests\adapters.py", line 449, in send
+    timeout=timeout
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 677, in urlopen
+    chunked=chunked,
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 381, in _make_request
+    self._validate_conn(conn)
+  File "D:\Python36\lib\site-packages\urllib3\connectionpool.py", line 976, in _validate_conn
+    conn.connect()
+  File "D:\Python36\lib\site-packages\urllib3\connection.py", line 344, in connect
+    cert_reqs=resolve_cert_reqs(self.cert_reqs),
+  File "D:\Python36\lib\site-packages\urllib3\util\ssl_.py", line 276, in create_urllib3_context
+    context.options |= options
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  File "D:\Python36\lib\ssl.py", line 465, in options
+    super(SSLContext, SSLContext).options.__set__(self, value)
+  [Previous line repeated 313 more times]
+RecursionError: maximum recursion depth exceeded

@@ -1,0 +1,8 @@
+[2021-07-05 12:01:51,937 test_m3u8_downloader.py][line:96] [46504-MainThread-28044:] INFO     headers -> {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36'}
+[2021-07-05 12:01:53,756 bde4_downloader.py][line:32] [46504-MainThread-28044:] ERROR    下载失败: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+Traceback (most recent call last):
+  File "D:\Git_proj\KinYoshi\bde4_downloader.py", line 30, in bde4_download
+    return imd.download(urls, filepath, keys=keys, chunk_size=chunk_size, wipe_cache=wipe_cache)
+  File "D:\Git_proj\KinYoshi\bde4_downloader.py", line 41, in control
+    dirname_tmp = self.TMP_DIR / dirname.name / f"{filename}文件夹"
+AttributeError: 'Bde4Downloader' object has no attribute 'TMP_DIR'
