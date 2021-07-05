@@ -388,8 +388,8 @@ if __name__ == '__main__':
     #     # downloader.download(m3u8_url, f'E:\\YunBo\\{i["episode_name"]}', headers=j['headers'], thread_num=10)
     #     break
 
-    m3u8_url = 'https://v5.dious.cc/20210528/mS1Ht0kT/1000kb/hls/index.m3u8?skipl=1'
-    downloader.download(m3u8_url, f'E:\\YunBo\\麻辣变形计.39.ts',
+    m3u8_url = 'https://www.mp4er.com/10E79044B82A84F70BE1308FFA5232E4D19DA0D4525334DD207F4695581208DB3079D0C8B90E3F31C005593659066AF8.m3u8'
+    downloader.download(m3u8_url, f'E:\\YunBo\\乔治敦.162547218563875608.ts',
                         headers=headers, thread_num=10)
     # pm = ParseM3u8()
     # pm.start(m3u8_url, f'E:\\YunBo\\6-25-2.ts')

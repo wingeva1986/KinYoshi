@@ -6,3 +6,27 @@ Traceback (most recent call last):
   File "D:\Git_proj\KinYoshi\bde4_downloader.py", line 41, in control
     dirname_tmp = self.TMP_DIR / dirname.name / f"{filename}文件夹"
 AttributeError: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+[2021-07-05 14:24:03,690 test_m3u8_downloader.py][line:96] [55700-MainThread-57716:] INFO     headers -> {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36'}
+[2021-07-05 14:24:05,791 bde4_downloader.py][line:32] [55700-MainThread-57716:] ERROR    下载失败: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+Traceback (most recent call last):
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 30, in bde4_download
+    return imd.download(urls, filepath, keys=keys, chunk_size=chunk_size, wipe_cache=wipe_cache)
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 41, in control
+    dirname_tmp = self.TMP_DIR / dirname.name / f"{filename}文件夹"
+AttributeError: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+[2021-07-05 14:24:15,456 test_m3u8_downloader.py][line:96] [57324-MainThread-55104:] INFO     headers -> {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36'}
+[2021-07-05 14:24:17,233 bde4_downloader.py][line:32] [57324-MainThread-55104:] ERROR    下载失败: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+Traceback (most recent call last):
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 30, in bde4_download
+    return imd.download(urls, filepath, keys=keys, chunk_size=chunk_size, wipe_cache=wipe_cache)
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 41, in control
+    dirname_tmp = self.TMP_DIR / dirname.name / f"{filename}文件夹"
+AttributeError: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+[2021-07-05 14:24:30,656 test_m3u8_downloader.py][line:96] [14728-MainThread-61752:] INFO     headers -> {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36'}
+[2021-07-05 14:24:32,612 bde4_downloader.py][line:32] [14728-MainThread-61752:] ERROR    下载失败: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+Traceback (most recent call last):
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 30, in bde4_download
+    return imd.download(urls, filepath, keys=keys, chunk_size=chunk_size, wipe_cache=wipe_cache)
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 41, in control
+    dirname_tmp = self.TMP_DIR / dirname.name / f"{filename}文件夹"
+AttributeError: 'Bde4Downloader' object has no attribute 'TMP_DIR'
