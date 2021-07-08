@@ -282,11 +282,12 @@ if __name__ == "__main__":
                         format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
 
-    url = f'https://www.bilibili.com/video/BV1MQ4y1R7B4?zw'
-    output = f'E:\\YunBo\\RunningMan.20210620.mp4'
+    url = f'https://www.bilibili.com/bangumi/play/ss34224?bsource=baidu_aladdin'
+    output = f'E:\\YunBo\\居家男人.mp4'
 
     res = BiLiBiLi(url).parse()
     data = json.dumps(res)
+    print(data)
     vinfo = res[0]['vinfo']
     down_type = vinfo['type']
 

@@ -273,8 +273,8 @@ if __name__ == '__main__':
     db_handle = db.bilibili_video_info
     # db_handle = db.media_asserts_info_iqiyi
 
-    name = '鲨鱼：起点'
-    douban_id = '35474592'
+    name = '人类清除计划3'
+    douban_id = '26101255'
     # insert_tv_series(db_handle, name, douban_id, 10, episode_name=name)
     insert_movie_data(db_handle, name, douban_id, episode_name=name)
     # insert_to_db(db_handle, key_map)
