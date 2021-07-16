@@ -11,10 +11,12 @@ import logging
 import time
 import zlib
 import pymongo
+from scrapy import Selector
 from abc import ABCMeta, abstractmethod
 
 import m3u8
 from m3u8.model import PartInformation
+from requests import api
 
 from utils.CommonUtils import get_ts_list
 from bde4_downloader import bde4_download
@@ -354,11 +356,11 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
-    data_source = '104.194.11.183'
-    client = pymongo.MongoClient(host=data_source, port=27117)
-    client.admin.authenticate("svcadmin", "admin#svc2020")
-    db = client.tp_media_assert_db
-    db_handle = db.dandanzan_movie_info
+    # data_source = '104.194.11.183'
+    # client = pymongo.MongoClient(host=data_source, port=27117)
+    # client.admin.authenticate("svcadmin", "admin#svc2020")
+    # db = client.tp_media_assert_db
+    # db_handle = db.dandanzan_movie_info
     headers = {
         # 'Connection': 'keep-alive',
         # 'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
@@ -372,7 +374,7 @@ if __name__ == '__main__':
     }
 
     # downloader = StandM3u8Downloader()
-    downloader = IQIYIM3u8Downloader()
+    # downloader = IQIYIM3u8Downloader()
 
     # download_list = []
     # info_list = db_handle.find({"name": "终极一班5", "seq_num": {"$gte": "55"}})
@@ -387,9 +389,35 @@ if __name__ == '__main__':
     #     print(i["episode_name"], m3u8_url)
     #     # downloader.download(m3u8_url, f'E:\\YunBo\\{i["episode_name"]}', headers=j['headers'], thread_num=10)
     #     break
+    '''
+    飞哥与小佛  https://www.70cn.com/tag/%E9%A3%9E%E5%93%A5%E4%B8%8E%E5%B0%8F%E4%BD%9B#
+    地狱厨房    https://www.70cn.com/tag/%E5%9C%B0%E7%8B%B1%E5%8E%A8%E6%88%BF
+    '''
+    # api_url = 'http://127.0.0.1:9700/parse/ktkkt'
 
-    m3u8_url = 'https://video.buycar5.cn/20201019/WGtc5UkM/1000kb/hls/index.m3u8'
-    downloader.download(m3u8_url, f'E:\\YunBo\\飞哥与小佛.32.ts',
+    # base_url = 'https://www.ktkkt.top'
+    # list_url = 'https://www.ktkkt.top/movie/index4992.html'
+    # res_str = requests.get(list_url, headers=headers).text
+    # selector = Selector(text=res_str)
+    # episode_list = selector.xpath('//div[@id="playlist1"]/ul/li')
+    # for episode in episode_list[115:]:
+    #     episode_name = episode.xpath('a/text()').get()
+    #     play_url = episode.xpath('a/@href').get()
+    #     if play_url and episode_name:
+    #         play_url = base_url + play_url
+    #         episode_num = re.findall(r'(\d+)',  episode_name)[0]
+            
+    #         data = {
+    #             'url': play_url
+    #         }
+    #         response = requests.post(api_url, data=data)
+    #         res_json = response.json()
+    #         M3u8Downloader().download('', f'E:\\YunBo\\龙珠超国语版.{episode_num}.ts', vinfo=res_json['result'][0], thread_num=10)
+
+    m3u8_url = 'https://cdn.oss-cn.aliyuncs.com.gms-lighting.com/player/m3u8play.php?url=7bd479d-6qMppLCbx27fwrwShPqW46IPE20rw_GNnliNHR3voqqtoqgrOKqj6LN_7tHII8DnfSrK8lG9LTz1YyCafZYJSW2G2eRL-x3gW2GkTQ81OoC9MVLggRic8f4g6OBsdxV1JfyE9m3ZSDZmt4yPEA'
+    IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\7-16.ts',
                         headers=headers, thread_num=10)
     # pm = ParseM3u8()
     # pm.start(m3u8_url, f'E:\\YunBo\\6-25-2.ts')
+
+

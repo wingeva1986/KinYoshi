@@ -101,7 +101,7 @@ class Bde4Downloader(IQIYIM3u8Download):
 
         with requests.session() as session:
             resp_bytes = session.request(
-                'get', url, headers=headers, timeout=60).content
+                'get', url, headers=headers, timeout=120, verify=False).content
             with open(filepath, 'wb') as fwb:
                 if key and self.keys:
                     resp_bytes = self.keys[key].decrypt(resp_bytes)
