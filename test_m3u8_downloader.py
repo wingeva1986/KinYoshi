@@ -365,7 +365,7 @@ if __name__ == '__main__':
         # 'Connection': 'keep-alive',
         # 'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
         # 'sec-ch-ua-mobile': '?0',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36',
+        'User-Agent': choice_agent(),
         # 'Accept': '*/*',
         # 'Sec-Fetch-Site': 'cross-site',
         # 'Sec-Fetch-Mode': 'cors',
@@ -397,12 +397,13 @@ if __name__ == '__main__':
 
     # base_url = 'https://www.ktkkt.top'
     # list_url = 'https://www.ktkkt.top/movie/index4992.html'
-    # res_str = requests.get(list_url, headers=headers).text
+    # res_str = requests.get(list_url, headers=headers, proxies=get_proxy()).text
     # selector = Selector(text=res_str)
     # episode_list = selector.xpath('//div[@id="playlist1"]/ul/li')
-    # for episode in episode_list[115:]:
+    # for episode in episode_list[125:130]:
     #     episode_name = episode.xpath('a/text()').get()
     #     play_url = episode.xpath('a/@href').get()
+    #     print(f'episode_name={episode_name}, play_url={base_url + play_url}')
     #     if play_url and episode_name:
     #         play_url = base_url + play_url
     #         episode_num = re.findall(r'(\d+)',  episode_name)[0]
@@ -412,11 +413,15 @@ if __name__ == '__main__':
     #         }
     #         response = requests.post(api_url, data=data)
     #         res_json = response.json()
-    #         M3u8Downloader().download('', f'E:\\YunBo\\龙珠超国语版.{episode_num}.ts', vinfo=res_json['result'][0], thread_num=10)
-
-    m3u8_url = 'https://cdn.oss-cn.aliyuncs.com.gms-lighting.com/player/m3u8play.php?url=7bd479d-6qMppLCbx27fwrwShPqW46IPE20rw_GNnliNHR3voqqtoqgrOKqj6LN_7tHII8DnfSrK8lG9LTz1YyCafZYJSW2G2eRL-x3gW2GkTQ81OoC9MVLggRic8f4g6OBsdxV1JfyE9m3ZSDZmt4yPEA'
-    IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\7-16.ts',
-                        headers=headers, thread_num=10)
+    #         print(res_json)
+    #         IQIYIM3u8Downloader().download(
+    #             res_json['result'][0]['urls'], 
+    #             f'E:\\YunBo\\龙珠超国语版.{episode_num}.ts',
+    #             thread_num=10)
+    #     time.sleep(.5)
+    m3u8_url = 'https://www.mp4er.com/10E79044B82A84F70BE1308FFA5232E45E1BF4AD728091C9ED8951D43C5C7BE0240C4FF83F4998C573360D5AB221161D.m3u8'
+    IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\7-27.ts',
+                        headers=headers, thread_num=1)
     # pm = ParseM3u8()
     # pm.start(m3u8_url, f'E:\\YunBo\\6-25-2.ts')
 

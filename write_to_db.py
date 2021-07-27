@@ -262,56 +262,26 @@ if __name__ == '__main__':
     # db_handle = db.media_asserts_info_iqiyi
 
     # for i in url_list:
-    # for i in range(1, 16):
-    #     url = f'https://www.bilibili.com/video/BV1as411Z7kM?p={i}'
-    #     # url = i["url"]
-    #     seq_num = f'{i}'
-    #     # if i < 10:
-    #     #     seq_num = f'0{i}'
-    #     # else:
-    #     #     seq_num = str(i)
-    #     data = generate_media_assets('地狱厨房第四季', douban_id='10786022', seq_num=seq_num,
-    #                                  download_url=url, language='英语', episode_name=f'地狱厨房第四季.{seq_num}')
-    #     data.pop('download_state')
-    #     print(data)
-    #     insert_to_db(db_handle, data)
+    for i in range(1, 17):
+        url = f'https://www.bilibili.com/video/BV1ZE411Q79a?p={i}'
+        # url = i["url"]
+        seq_num = f'{i}'
+        # if i < 10:
+        #     seq_num = f'0{i}'
+        # else:
+        #     seq_num = str(i)
+        data = generate_media_assets('小森林', douban_id='33464504', seq_num=seq_num,
+                                     download_url=url, language='韩语', episode_name=f'小森林.{seq_num}')
+        data.pop('download_state')
+        print(data)
+        insert_to_db(db_handle, data)
 
-    # name = '蓝色小考拉'
-    # douban_id = '3862196'
-    # insert_tv_series(db_handle, name, douban_id, 35, episode_name=name)
+    name = '新兵正传2'
+    douban_id = '21356476'
+    # insert_tv_series(db_handle, name, douban_id, 6, episode_name=name)
     # insert_movie_data(db_handle, name, douban_id, episode_name=name)
     # insert_to_db(db_handle, key_map)
 
-    headers = {
-        'Connection': 'keep-alive',
-        'sec-ch-ua': '" Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"',
-        'Accept': 'application/json, text/javascript, */*; q=0.01',
-        'X-Requested-With': 'XMLHttpRequest',
-        'sec-ch-ua-mobile': '?0',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Origin': 'https://jiexi.8old.cn',
-        'Sec-Fetch-Site': 'same-origin',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Dest': 'empty',
-        'Accept-Language': 'zh-CN,zh;q=0.9',
-    }
-
-    data = {
-        'url': 'https://v.qq.com/x/cover/mzc00200y4wycre/a0039clsejq.html',
-        'referer': 'aHR0cHM6Ly9qeC5tM3U4LnR2Lw==',
-        # 'ref': '0',
-        'time': '1626248182',
-        'ip': '113.89.9.106',
-        'other': 'aHR0cHM6Ly92LnFxLmNvbS94L2NvdmVyL216YzAwMjAweTR3eWNyZS9hMDAzOWNsc2VqcS5odG1s',
-        'token': '4c5336655235cd87cbaf3581b3aeed54',
-        'keys': 'a0bca7ecb8676d07e46744ffdcc6dbaa',
-        'keep': 'db7f8831f24e9fb8820ba56bfa029fda',
-        'key': '4b064835f47870bdc45f0742581e15e6'
-    }
-
-    # response = requests.post('https://jiexi.8old.cn/m3u8tv20210705%60/api.php', headers=headers, data=data)
-    # print(response.json())
     from Crypto.Cipher import AES
     import numpy as np
     def computeMD5(message):

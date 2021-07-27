@@ -10,7 +10,7 @@ from utils.m3u8_downloader import IQIYIM3u8Download
 from func_timeout import func_set_timeout, FunctionTimedOut
 from tenacity import retry, stop_after_attempt, wait_fixed
 from utils.util_agent import choice_agent
-
+from utils.CommonUtils import get_proxy
 logger = logging.getLogger(__name__)
 
 
@@ -101,7 +101,7 @@ class Bde4Downloader(IQIYIM3u8Download):
 
         with requests.session() as session:
             resp_bytes = session.request(
-                'get', url, headers=headers, timeout=120, verify=False).content
+                'get', url, headers=headers, timeout=120, proxies=get_proxy()).content
             with open(filepath, 'wb') as fwb:
                 if key and self.keys:
                     resp_bytes = self.keys[key].decrypt(resp_bytes)
