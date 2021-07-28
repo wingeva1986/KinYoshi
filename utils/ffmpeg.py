@@ -10,21 +10,33 @@ import time
 import traceback
 import platform
 
-
 logger = logging.getLogger(__name__)
 
 UNKNOW_SIZE = -1.0
+SUPPORT_CHANNEL_NUMBER = 6
 # bps
 BIT_RATE_4K_MAX = 10000000
 BIT_RATE_4K = 6000000
 BIT_RATE_2K_MAX = 4000000
 BIT_RATE_2K = 1800000
+AAC_BIT_RATE_MAX = 400000
+AAC_BIT_RATE_MINIMUM = 128000
+BITE_RATE_MIINIMUM = 128000
+BITE_RATE_MEDIUM = 192000
+BITE_RATE_MAX = 320000
 '''
 转码算法：
-1.视频处理：只选择默认视频输出转为HEVC（一路）， 使用选项 -map 0:V:? 
+1.视频处理：
+    1.1. 默认copy_mode, 如果视频不是h264或h265, 则需要transcode. 如果有外挂.idx/.sub字幕也需要transcode
+    1.2. 转码模式下:
+        1.2.1. 有GPU但是码率不大, 则直接copy
+        1.2.2. 有GPU但是码率过大, 则转成h265
+        1.2.3. 没有GPU, 则转成h264
 2.音频处理：
-    2.1 所有路的音频都要转为aac， 使用 -map 0:a -c:a aac -b:a 128k
-    2.2 对所有音轨增加一份dolby的编码
+    2.1 当只有ac3音轨或者有其他音轨的时候,需要转成aac, 再生成ac3
+    2.2 当只有aac和ac3是无需再生成ac3
+    aac: 声道为立体声, 原码率小于128修改为128, 大于128小于400修改为192, 大于400修改为320
+    ac3: 原本是两声道的话码率为192, 大于等于六声道修改为六声道码率为320, 声道数不知道则为六声道码率为320
 3.字幕处理：
     3.1 外挂字幕.srt  使用 -vf subtitles="sub.srt"
     3.2 外挂字幕.sub/.idx 使用 -filter_complex "[0:V][1:s:x]overlay=0:H-h" ，需实现根根据语言选择字幕
@@ -33,6 +45,52 @@ BIT_RATE_2K = 1800000
     3.3 内置字幕导出到外部字幕，同外部字幕相同处理 ，ffmpeg -i xxx.mkv -map 0:3 xxx.srt ，需实现根据语言选择导出字幕
         3.3.1 内置字幕无指定语言时优先eng 
         3.3.2 内置字幕无eng则默认选择第一个语言 ffmpeg -i xxx.mkv -map 0:s:0 xxx.srt
+'''
+
+'''
+ffmpeg处理音频:
+测试文件: media_toolset/transocder_test_filie
+1. 已有aac并且只有aac, copy aac音轨并添加ac3音轨
+    Stream #0:1 aac 66k     码率小于400k, 无需转
+    Stream #0:2 aac 66k     码率小于400k, 无需转
+    ffmpeg -i video_aac_aac.ts -map 0:1 -vn -acodec copy -f mp4 -y aac_1.ts
+    ffmpeg -i video_aac_aac.ts -map 0:2 -vn -acodec copy -f mp4 -y aac_2.ts
+    ffmpeg -i video_aac_aac.ts -map 0:1 -map 0:2 -vn -acodec ac3 -ab 192k -ac 6 -f mp4 -y ac3.ts
+2. 有aac和ac3, aac码率小于400k直接copy aac, ac3码率大于于400k, 需要转成320k
+    Stream #0:1 aac 66k     码率小于400k, 无需转
+    Stream #0:1 ac3 448k    码率大于于400k, 需要转成320k
+    ffmpeg -i video_aac_ac3.ts -map 0:1 -vn -acodec copy -f mp4 -y aac_1.ts
+    ffmpeg -i video_aac_ac3.ts -map 0:2 -vn -acodec ac3 -ab 320k -f mp4 -y ac3_2.ts
+3. 只有ac3(包含eac3), 都需要先将ac3/eac3转成aac, 再添加dolby音轨
+    Stream #0:1 ac3 448k    码率大于于400k, 需要转成320k
+    Stream #0:2 ac3 448k    码率大于于400k, 需要转成320k
+    ffmpeg -i video_ac3_ac3.ts -map 0:1 -vn -acodec aac -ab 320k -f mp4 -y aac_1.ts
+    ffmpeg -i video_ac3_ac3.ts -map 0:2 -vn -acodec aac -ab 320k -f mp4 -y aac_2.ts
+    ffmpeg -i video_ac3_ac3.ts -map 0:1 -map 0:2 -vn -acodec ac3 -ab 192k -ac 6 -f mp4 -y ac3.ts
+4. 当存在其他音轨时, 需要转成aac
+    Stream #0:1 aac 57k     码率小于400k, 无需转
+    Stream #0:2 aac 57k     码率小于400k, 无需转
+    Stream #0:3 dts 1411k   码率大于400k, 需要转成320k
+    ffmpeg -i video_aac_aac_dts.ts -map 0:1 -vn -acodec copy -f mp4 -y aac_1.ts
+    ffmpeg -i video_aac_aac_dts.ts -map 0:2 -vn -acodec copy -f mp4 -y aac_2.ts
+    ffmpeg -i video_aac_aac_dts.ts -map 0:3 -vn -acodec aac -ab 320k -f mp4 -y aac_3.ts
+    ffmpeg -i video_aac_aac_dts.ts -map 0:1 -map 0:2 -map 0:3 -vn -acodec ac3 -ab 192k -ac 6 -f mp4 -y ac3.ts
+5. 混合例子, 包含ac3和aac的大码率和小码率
+    Stream #0:1 ac3 448k    码率大于于400k, 需要转成320k
+    Stream #0:2 ac3 192k    码率小于400k, 无需转
+    Stream #0:3 ac3 640k    码率大于于400k, 需要转成320k
+    Stream #0:4 aac 318k    码率小于400k, 无需转
+    Stream #0:5 aac 405k    码率大于于400k, 需要转成320k
+    ffmpeg -i video_have_big_rate_audio.ts -map 0:1 -vn -acodec ac3 -ab 320k -f mp4 -y ac3_1.ts
+    ffmpeg -i video_have_big_rate_audio.ts -map 0:2 -vn -acodec copy -f mp4 -y ac3_2.ts
+    ffmpeg -i video_have_big_rate_audio.ts -map 0:3 -vn -acodec ac3 -ab 320k -f mp4 -y ac3_3.ts
+    ffmpeg -i video_have_big_rate_audio.ts -map 0:4 -vn -acodec copy -f mp4 -y aac_4.ts
+    ffmpeg -i video_have_big_rate_audio.ts -map 0:4 -vn -acodec aac -ab 320k -f mp4 -y aac_5.ts
+6. 当音轨的声道数大于6时, 需要改成6声道
+    Stream #0:1 aac 66k   channels 8   码率小于400k, 无需转, 声道数大于6, 需要改成6声道
+    Stream #0:1 ac3 448k  channels 6   码率大于于400k, 需要转成320k
+    ffmpeg -i video_aac_ac3_8c.ts -map 0:1 -vn -acodec aac -ac 6 -f mp4 -y aac_1.ts
+    ffmpeg -i video_aac_ac3_8c.ts -map 0:2 -vn -acodec ac3 -ab 320k -f mp4 -y ac3_2.ts
 '''
 
 '''
@@ -154,8 +212,7 @@ def get_sub_idx_subtitle_file(name, target_lang, only_get_file=False):
                 # print line,  #python2 用法
                 if line.startswith('id:'):
                     logger.info('%s', line.strip('\n'))
-                    match = re.match(
-                        r'\s*id:\s*(\D*),\s*index\s*:\s*(\d*)\s*', line)
+                    match = re.match(r'\s*id:\s*(\D*),\s*index\s*:\s*(\d*)\s*', line)
                     if not not match:
                         subtitle = {}
                         subtitle['lang'] = match.group(1)
@@ -170,8 +227,7 @@ def get_sub_idx_subtitle_file(name, target_lang, only_get_file=False):
                         target_idx = subtitle['index']
         if target_idx < 0:
             target_idx = 0
-    logger.info('get_sub_idx_subtitle_file {},{},{}'.format(
-        target_idx, target_idx_file, target_sub_file))
+    logger.info('get_sub_idx_subtitle_file {},{},{}'.format(target_idx, target_idx_file, target_sub_file))
     return target_idx, target_idx_file, target_sub_file
 
 
@@ -182,69 +238,151 @@ def __build_params(pub_params: list, last_param):
         params.append("{last_param}".format(last_param=last_param))
         shell = False
     else:
-        params = [' '.join(pub_params) +
-                  ' "{last_param}"'.format(last_param=last_param)]
+        params = [' '.join(pub_params) + ' "{last_param}"'.format(last_param=last_param)]
         shell = True
     print(params)
     # print(shell)
     return shell, params
 
 
-'''
-subtitle_mode:0 没有subtitle
-subtitle_mode:1 有外部的.idx\.sub格式subtitle
-subtitle_mode:2 有外部的.srt格式subtitle
-subtitle_mode:3 有内部.srt/.ass格式subtitle
-优先级 1 > 2 >3
-'''
-
-
-def transcode(src, output, gpu=True, offset=0.0, duration=0.0, copy_mode=False, retry_mode=False, mp4=False,
-              target_lang={'iso639_1': 'en', 'iso639_2': 'eng'}, subfile_mode=1, timeout=7200, srt_dir=None,
-              add_dolby=True):
+def ffmpeg_audio_tracks_process(input_file, output_file, track_list: list, shell, bit_rate=320, timeout=7200,
+                                channels=2, **kwargs):
     '''
-    视频转码，将视频中内置字幕剥离，所有音轨转成aac并保留ac3音轨（将eac3转为ac3）
-    :rtype:
-    :param timeout:
-    :param srt_dir:
-    :param src:
-    :param output:
-    :param gpu:
-    :param offset:
-    :param duration:
-    :param copy_mode: prefer copy mode if video codec is h264 or h265, otherwise will transcod to h265
-    :param retry_mode:
-    :param mp4:
-    :param target_lang:
-    :param subfile_mode: subfile_mode
+    :param input_file: input file
+    :param output_file: target output file
+    :param track_list: need process audio track
+    :param shell: whether is shell
+    :param bit_rate: target bit_rate
+    :param timeout: maximum timeout setting
+    :param channels: channel number
+    :param kwargs:
     :return:
     '''
-    output_full_name = output
-    output_tmp = output + '.tmp'
-    output_ac3_tmp = output + 'ac3.tmp'
-    media_info = ffprobe_get_media_info(src)
-    if 'format' not in media_info or 'stream' not in media_info:
-        raise Exception('invalid param file=%s' % (src))
+    ret = True
+    target_codec = kwargs.get('target_codec', 'aac')
+    trans_options = []
+    for track_index in track_list:
+        trans_options.append('-map')
+        trans_options.append(f'0:{track_index}')
+    trans_options += ["-vn", "-acodec", f"{target_codec}", "-ab", f"{bit_rate}"]
+    trans_options += ["-ac", f'{channels}', "-ar", "44100", "-max_muxing_queue_size", "1500"]
+    if not shell:
+        cmd = ['ffmpeg', '-i', input_file] + trans_options + ['-f', 'mpegts', '-y', output_file]
+    else:
+        trans_options = ' '.join(trans_options)
+        cmd = 'ffmpeg -i "%s" %s -f mpegts -y %s' % (input_file, trans_options, output_file)
+    logger.info(f'trans audio tracks cmd={cmd}')
+    try:
+        subprocess.check_output(cmd, shell=shell, stdin=None, stderr=subprocess.STDOUT, timeout=timeout)
+    except BaseException as e:
+        ret = False
+        logger.warning('transcode audio tracks failed %s params=[%s]\n %s', e, cmd, ' '.join(cmd))
+        logger.warning(f'{traceback.print_exc()}')
+    return ret
 
+
+def gen_ac3_audio(input_file, output_file, all_ac3_list, audio_index_list, shell, add_dolby=True):
+    ret = True
+    if add_dolby and (all_ac3_list or audio_index_list):
+        transcode_options = ["-vn", "-acodec", "ac3", "-ab", "320k", "-ac", "6"]
+        if all_ac3_list:
+            ac3_list = list(all_ac3_list)
+        else:
+            ac3_list = list(audio_index_list)
+
+        '''
+         we add all ac3 channels for the 
+         1 gen output_ac3_tmp for ac3 channels,transcode eac3 to ac3
+         2 combine output_tmp and output_ac3_tmp to output_full_name
+         3 remove output_tmp and output_ac3_tmp
+        '''
+        # ffmpeg -i input.mp4 -vn -acodec ac3 -ab 384k -y output.mp4
+        ac3_options = []
+        for ac3_index in ac3_list:
+            ac3_options.append('-map')
+            ac3_options.append(f'0:{ac3_index}')
+        ac3_options += transcode_options
+        ac3_options += ["-ar", "48000", "-max_muxing_queue_size", "1500", "-f", "mp4", "-y"]
+        if not shell:
+            cmd = ['ffmpeg', '-i', input_file] + ac3_options + [output_file]
+        else:
+            ac3_options = ' '.join(ac3_options)
+            cmd = f'ffmpeg -i "{input_file}" {ac3_options} "{output_file}"'
+
+        logger.info('gen ac3 cmd = %s', cmd)
+        try:
+            subprocess.check_output(cmd, shell=shell, stdin=None, stderr=subprocess.STDOUT, timeout=7200)
+        except BaseException as e:
+            ret = False
+            logger.warning('transcode gen ac3 failed %s params=[%s]\n %s', e, cmd, ' '.join(cmd))
+            logger.warning(f'{traceback.print_exc()}')
+    return ret
+
+
+def ffmpeg_combine_video_audio(video_src, audio_src_list, output, shell, timeout=7200, **kwargs):
+    '''
+    调用ffmpeg将一个视频文件和多个音轨文件合并起来
+    ffmpeg -i video_src -i audio_src1 -i audio_src2 -map 0:V:? -map 1:a -map 2:a -c copy -f mpegts -y output
+    :param video_src: video source file
+    :param audio_src_list: audio source file list
+    :param output: target output file
+    :param shell: whether is shell
+    :param timeout: maximum timeout setting
+    :param kwargs:
+    :return:
+    '''
+    ret = True
+    src_options = []
+    combine_options = ['-map', '0:V:?']
+    for i in range(len(audio_src_list)):
+        src_options.append('-i')
+        src_options.append(audio_src_list[i])
+        combine_options.append('-map')
+        combine_options.append(f'{i + 1}:a')
+    if not shell:
+        cmd = ['ffmpeg', '-i', video_src] + src_options + combine_options + ["-c", "copy", "-f", 'mpegts', '-y', output]
+    else:
+        src_options = ' '.join(src_options)
+        combine_options = ' '.join(combine_options)
+        cmd = 'ffmpeg -i "%s" %s %s -c copy -f mpegts -y %s' % (video_src, src_options, combine_options, output)
+    try:
+        subprocess.check_output(cmd, shell=True, stdin=None, stderr=subprocess.STDOUT, timeout=timeout)
+    except BaseException as e:
+        ret = False
+        logger.warning('combine video audio failed %s params=[%s]\n %s', e, cmd, ' '.join(cmd))
+        logger.warning(f'{traceback.print_exc()}')
+    return ret
+
+
+def process_video(input_file, output_file, media_info, offset, duration, target_lang, shell, copy_mode=True, gpu=True,
+                  mp4=False, timeout=7200, decode_mode=True, **kwargs):
+    '''
+    1. 默认copy_mode, 如果input_file不是h264或h265, 则需要transcode. 如果有外挂.idx/.sub字幕也需要transcode
+    2. 转码模式下:
+        1. 有GPU但是码率不大, 则直接copy
+        2. 有GPU但是码率过大, 则转成h265
+        3. 没有GPU, 则转成h264
+    :param input_file: input file
+    :param output_file: target output file
+    :param media_info: input file media info
+    :param offset:
+    :param duration:
+    :param target_lang:
+    :param shell: whether is shell
+    :param copy_mode: prefer copy mode if video codec is h264 or h265, otherwise will transcod to h265
+    :param gpu: whether to use gpu
+    :param mp4:
+    :param timeout: maximum timeout setting
+    :param kwargs:
+    :return:
+    '''
     file_dur = float(media_info['format']['duration'])
     is_hevc = media_info['format']['have_hevc']
     have_264_hevc = media_info['format']['have_264_hevc']
-    have_4k = media_info['format']['have_4k']
-
-    ac3_index_list = set(
-        map(lambda stream: stream['index'] if stream['codec_name'].startswith('ac3') else -1, media_info['stream']))
-    eac3_index_list = set(
-        map(lambda stream: stream['index'] if stream['codec_name'].startswith('eac3') else -1, media_info['stream']))
-    audio_index_list = set(
-        map(lambda stream: stream['index'] if stream['codec_type'].startswith('audio') else -1, media_info['stream']))
-    ac3_index_list.discard(-1)
-    eac3_index_list.discard(-1)
-    audio_index_list.discard(-1)
-    all_ac3_list = list(ac3_index_list) + list(eac3_index_list)
+    # have_4k = media_info['format']['have_4k']
 
     if file_dur != UNKNOW_SIZE and file_dur < offset + duration:
-        raise Exception('invalid param file_dur=%f, offset=%f,duration=%f' % (
-            file_dur, offset, duration))
+        raise Exception('invalid param file_dur=%f, offset=%f,duration=%f' % (file_dur, offset, duration))
 
     if not isinstance(target_lang,
                       dict) or 'iso639_1' not in target_lang.keys() or 'iso639_2' not in target_lang.keys():
@@ -258,7 +396,6 @@ def transcode(src, output, gpu=True, offset=0.0, duration=0.0, copy_mode=False, 
             new_dur = file_dur - offset
         else:
             new_dur = duration
-    os_type = platform.system()
 
     mp4_mode = ' -movflags +faststart -f mp4 '
 
@@ -269,6 +406,24 @@ def transcode(src, output, gpu=True, offset=0.0, duration=0.0, copy_mode=False, 
     if not have_264_hevc:
         copy_mode = False
 
+    hevc_copy_mode, target_bit_rate = get_transcode_bite_rate_params(input_file)
+    if target_bit_rate == BIT_RATE_4K:
+        timeout = 18000
+    target_bit_rate = str(target_bit_rate)
+
+    target_idx, target_idx_file, target_sub_file = get_sub_idx_subtitle_file(input_file, target_lang)
+    if target_idx >= 0:
+        # 有外部的.idx\.sub格式subtitle
+        copy_mode = False
+        hevc_copy_mode = False
+
+    decoder_options = ' -vsync 0 ' if decode_mode else ''
+    if gpu and have_264_hevc and not hevc_copy_mode and decode_mode:
+        if is_hevc:
+            decoder_options += ' -hwaccel cuvid -c:v hevc_cuvid '
+        else:
+            decoder_options += ' -hwaccel cuvid -c:v h264_cuvid '
+
     # copy mode if the video codec is h264
     if copy_mode and have_264_hevc:
         if is_hevc:
@@ -276,262 +431,331 @@ def transcode(src, output, gpu=True, offset=0.0, duration=0.0, copy_mode=False, 
         else:
             ts_mode = ' -vbsf h264_mp4toannexb -f mpegts '
 
-    shell = True
-    if os_type.startswith('Windows'):
+    if not shell:
         # mp4_mode = ['-movflags', '+faststart', '-f', 'mp4']
         # ts_mode = ['-vbsf', 'hevc_mp4toannexb', '-f', 'mpegts']
         mp4_mode = mp4_mode.strip().split()
         ts_mode = ts_mode.strip().split()
-        shell = False
+        decoder_options = decoder_options.strip().split() if decode_mode else []
 
     if mp4:
         format_mode = mp4_mode
     else:
         format_mode = ts_mode
 
-    # need to use "" for file path,because special character -c:a aac -b:a 128k
     if copy_mode:
         if not shell:
-            cmd = ['ffmpeg', '-i', src, '-map', '0:V:?', '-map', '0:a', '-vcodec', 'copy',
-                   '-max_muxing_queue_size', '1500',
-                   '-c:a', 'aac', '-b:a', '192k', '-ac', '6', ] + format_mode + ['-y', output_tmp]
+            cmd = ['ffmpeg', '-i', input_file, '-map', '0:V:?', '-vcodec', 'copy',
+                   '-max_muxing_queue_size', '1500'] + format_mode + ['-y', output_file]
         else:
-            cmd = [
-                'ffmpeg -i "%s"  -map 0:V:?  -map 0:a -vcodec copy -c:a aac -b:a 192k -ac 6 -max_muxing_queue_size 1500 %s -y %s' % (
-                    src, format_mode, output_tmp)]
+            cmd = ['ffmpeg -i "%s" -map 0:V:? -vcodec copy -max_muxing_queue_size 1500 %s -y %s' % (
+                input_file, format_mode, output_file)]
     else:
-        # 0 默认认为没有subtitle
-        subtitle_mode = 0
-
-        target_idx, target_idx_file, target_sub_file = get_sub_idx_subtitle_file(
-            src, target_lang)
-        if not subtitle_mode and target_idx >= 0:
-            # 1 有外部的.idx\.sub格式subtitle
-            subtitle_mode = 1
-
-        subtitles = ''
-        if not subtitle_mode:
-            srt_name = get_srt_subtitle_file(src)
-            if not not srt_name:
-                # 2 有外部的.srt格式subtitle
-                subtitle_mode = 2
-                subtitles = srt_name
-                mime_encoding = file_mime_encoding(srt_name)
-                logger.info('mime_encoding = %s' + mime_encoding)
-                if not mime_encoding:
-                    subtitle_mode = 0
-                else:
-                    input_name = os.path.basename(srt_name)
-                    name_without_ext = os.path.splitext(input_name)[0]
-                    outpath = srt_dir if not not srt_dir else os.path.dirname(
-                        output_tmp)
-                    output_srt_file = os.path.join(
-                        outpath, name_without_ext + '.srt_' + target_lang['iso639_2'])
-                    logger.info('copy srt %s to %s ',
-                                srt_name, output_srt_file)
-                    shutil.copy(srt_name, output_srt_file)
-
-        if not subtitle_mode:
-            # -vf subtitles ="%s" 可将subtitle文件或mkv视频中的subtitles轨道数据硬编到video层
-            have_subtitle, subtitle_file, subtitle_index, subtitle_lang = ffprobe_get_subtitle_with_index(src,
-                                                                                                          target_lang)
-            if have_subtitle:
-                # 3 有内部.srt/.ass格式subtitle
-                subtitle_mode = 3
-                subtitles = '%s:si=%d' % (subtitle_file, subtitle_index)
-
-        hevc_copy_mode, target_bit_rate = get_transcode_bite_rate_params(src)
-        if target_bit_rate == BIT_RATE_4K:
-            timeout = 18000
-        target_bit_rate = str(target_bit_rate)
-        codec_str = ''
-        if hevc_copy_mode:
-            codec_str = ' -map 0:V:? -map 0:a -vcodec copy -c:a aac -b:a 192k -ac 6 ' \
-                        '-metadata title="" -metadata author="" -metadata copyright="" ' \
-                        '-metadata comment="" -metadata description="" '
-            if not shell:
-                codec_str = codec_str.strip().split(' ')
         if gpu:
-            if not hevc_copy_mode:
+            if hevc_copy_mode:
+                codec_str = ' -map 0:V:? -vcodec copy ' \
+                            '-metadata title="" -metadata author="" -metadata copyright="" ' \
+                            '-metadata comment="" -metadata description="" '
                 if not shell:
-                    codec_str = ['-map', '0:V:?', '-map', '0:a', '-c:v', 'hevc_nvenc', '-max_muxing_queue_size',
-                                 '1500', '-preset', 'fast', '-b:v', '{vid_bitrate}'.format(
-                                     vid_bitrate=target_bit_rate),
-                                 '-c:a', 'aac', '-b:a', '192k', '-ac', '6', '-metadata', 'title=""', '-metadata',
-                                 'author=""', '-metadata', 'copyright=""', '-metadata', 'comment=""', '-metadata',
-                                 'description=""']
+                    codec_str = codec_str.strip().split(' ')
+            else:
+                if not shell:
+                    codec_str = ['-map', '0:V:?', '-c:v', 'hevc_nvenc', '-max_muxing_queue_size',
+                                 '1500', '-preset', 'fast', '-b:v', '{vid_bitrate}'.format(vid_bitrate=target_bit_rate),
+                                 '-metadata', 'title=""', '-metadata', 'author=""', '-metadata', 'copyright=""',
+                                 '-metadata', 'comment=""', '-metadata', 'description=""']
                 else:
-                    codec_str = ' -map 0:V:?  -map 0:a -c:v hevc_nvenc -max_muxing_queue_size 1500 -preset fast ' \
-                                '-b:v {vid_bitrate} -c:a aac -b:a 192k -ac 6 -metadata title="" -metadata author="" ' \
+                    codec_str = ' -map 0:V:? -c:v hevc_nvenc -max_muxing_queue_size 1500 -preset fast ' \
+                                '-b:v {vid_bitrate} -metadata title="" -metadata author="" ' \
                                 '-metadata copyright="" -metadata comment="" -metadata description="" '.format(
-                                    vid_bitrate=target_bit_rate)
-
-            if new_dur == UNKNOW_SIZE or offset == 0.0:
-                if subtitle_mode == 1:
-                    # 有外部的.idx\.sub格式subtitle
+                        vid_bitrate=target_bit_rate)
+            if target_idx >= 0:
+                # 有外部的.idx\.sub格式subtitle
+                if new_dur == UNKNOW_SIZE or offset == 0.0:
                     # ffmpeg -i "American.mp4" -i "American.idx" -i "American.sub" -map 0:V:?  -map 0:a -c:v hevc_nvenc -max_muxing_queue_size 700 -preset fast -b:v 1500k -c:a aac -b:a 128k -metadata title="" -metadata author="" -metadata copyright="" -metadata comment="" -metadata description="" -filter_complex "[0:V][1:s:4]overlay=0:H-h" -vbsf hevc_mp4toannexb  -f mpegts  -y American.ts
                     if not shell:
-                        cmd = ['ffmpeg', '-i', src, '-i', target_idx_file, '-i', target_sub_file] + codec_str \
-                            + ['-filter_complex', '[0:V:?][1:s:%d]overlay=0:H-h'.format(target_idx)] + format_mode + [
-                            '-y', output_tmp]
+                        cmd = ['ffmpeg', '-i', input_file, '-i', target_idx_file, '-i', target_sub_file] + codec_str \
+                              + ['-filter_complex', '[0:V:?][1:s:%d]overlay=0:H-h' % target_idx] + format_mode + [
+                                  '-y', output_file]
                     else:
                         cmd = [
                             'ffmpeg -i "%s" -i "%s" -i "%s" %s -filter_complex "[0:V:?][1:s:%d]overlay=0:H-h" %s -y %s'
-                            % (src, target_idx_file, target_sub_file, codec_str, target_idx, format_mode, output_tmp)]
-                elif subfile_mode == 1 and (subtitle_mode == 2 or subtitle_mode == 3):
-                    # srt
-                    # ffmpeg -i  /mnt/2.5/bludv/test_transecoder/MultipleSubtitle3.mkv  -map 0:V:?  -map 0:a -c:v hevc_nvenc -max_muxing_queue_size 700 -preset fast -b:v 1300k -c:a aac -b:a 128k -metadata title="" -metadata author="" -metadata copyright="" -metadata comment="" -metadata description="" -vf subtitles="/mnt/2.5/bludv/test_transecoder/MultipleSubtitle3.mkv:si=2" -vbsf hevc_mp4toannexb -f mpegts  -y MultipleSubtitle3.ts
-
-                    if not shell:
-                        cmd = ['ffmpeg', '-i', "{src}".format(src=src)] + codec_str + [
-                            '-vf', 'subtitles="%s"' % subtitles] + format_mode + ['-y', "%s" % output_tmp]
-                    else:
-                        cmd = ['ffmpeg -i "%s" %s -vf subtitles="%s"  %s -y %s' % (
-                            src, codec_str, subtitles, format_mode, output_tmp)]
+                            % (input_file, target_idx_file, target_sub_file, codec_str, target_idx, format_mode,
+                               output_file)]
                 else:
-                    # subtitle_mode == 0,have not subtitle:
-                    if not shell:
-                        cmd = ['ffmpeg', '-i', "{src}".format(src=src)] + codec_str + format_mode + ['-y',
-                                                                                                     "%s" % output_tmp]
-                    else:
-                        cmd = ['ffmpeg -i "%s" %s  %s -y %s' %
-                               (src, codec_str, format_mode, output_tmp)]
-
-            else:
-                if subtitle_mode == 1:
-                    # 有外部的.idx\.sub格式subtitle
                     # ffmpeg -i "American.mp4" -i "American.idx" -i "American.sub" -map 0:V:?  -map 0:a -c:v hevc_nvenc -max_muxing_queue_size 700 -preset fast -b:v 1500k -c:a aac -b:a 128k -metadata title="" -metadata author="" -metadata copyright="" -metadata comment="" -metadata description="" -filter_complex "[0:V][1:s:4]overlay=0:H-h" -vbsf hevc_mp4toannexb  -f mpegts  -y American.ts
                     if not shell:
-                        cmd = ['ffmpeg', '-ss', str(offset), '-t', str(new_dur), '-i', src, '-i', target_idx_file,
+                        cmd = ['ffmpeg', '-ss', str(offset), '-t', str(new_dur), '-i', input_file, '-i',
+                               target_idx_file,
                                '-i', target_sub_file] + codec_str \
-                            + ['-filter_complex', '[0:V:?][1:s:%d]overlay=0:H-h' % target_idx] \
-                            + format_mode + ['-y', "%s" % output_tmp]
+                              + ['-filter_complex', '[0:V:?][1:s:%d]overlay=0:H-h' % target_idx] \
+                              + format_mode + ['-y', "%s" % output_file]
                     else:
                         cmd = [
                             'ffmpeg -ss %f  -t %f  -i "%s" -i "%s" -i "%s" %s -filter_complex "[0:V:?][1:s:%d]overlay=0:H-h" %s -y %s' % (
-                                offset, new_dur, src, target_idx_file, target_sub_file, codec_str, target_idx,
-                                format_mode, output_tmp)]
-                elif subfile_mode == 1 and (subtitle_mode == 2 or subtitle_mode == 3):
-                    # srt
-                    # ffmpeg -i  /mnt/2.5/bludv/test_transecoder/MultipleSubtitle3.mkv  -map 0:V:?  -map 0:a -c:v hevc_nvenc -max_muxing_queue_size 700 -preset fast -b:v 1300k -c:a aac -b:a 128k -metadata title="" -metadata author="" -metadata copyright="" -metadata comment="" -metadata description="" -vf subtitles="/mnt/2.5/bludv/test_transecoder/MultipleSubtitle3.mkv:si=2" -vbsf hevc_mp4toannexb -f mpegts  -y MultipleSubtitle3.ts
-                    if not shell:
-                        cmd = ['ffmpeg', '-ss', str(offset), '-t', str(new_dur), '-i', src] + codec_str \
-                            + ['-vf', 'subtitles="%s"' % subtitles] + \
-                            format_mode + ['-y', "%s" % output_tmp]
-                    else:
-                        cmd = ['ffmpeg -ss %f  -t %f -i "%s" %s -vf subtitles="%s"  %s -y %s' % (
-                            offset, new_dur, src, codec_str, subtitles, format_mode, output_tmp)]
+                                offset, new_dur, input_file, target_idx_file, target_sub_file, codec_str, target_idx,
+                                format_mode, output_file)]
+            else:
+                if not shell:
+                    cmd = ['ffmpeg'] + decoder_options + ['-i', "{input_file}".format(
+                        input_file=input_file)] + codec_str + format_mode + ['-y', "%s" % output_file]
                 else:
-                    # subtitle_mode == 0,have not subtitle:
-
-                    if not shell:
-                        cmd = ['ffmpeg', '-ss', str(offset), '-t', str(new_dur), '-i',
-                               src] + codec_str + format_mode + ['-y', "%s" % output_tmp]
-                    else:
-                        cmd = ['ffmpeg -ss %f  -t %f -i "%s" %s  %s -y %s' % (
-                            offset, new_dur, src, codec_str, format_mode, output_tmp)]
+                    cmd = ['ffmpeg %s -i "%s" %s  %s -y %s' % (
+                        decoder_options, input_file, codec_str, format_mode, output_file)]
         else:
             if not shell:
-                cmd = ['ffmpeg', '-i', src, '-c:v h264', '-preset', 'fast', '-b:v', target_bit_rate,
-                       '-c:a', 'aac', '-b:a', '192k', '-ac', '6', '-max_muxing_queue_size', '1500', '-movflags',
-                       '+faststart', '-f', 'mp4',
-                       '-y' "%s" % output_tmp]
+                cmd = ['ffmpeg', '-i', input_file, '-map', '0:V:?', '-c:v h264', '-preset', 'fast', '-b:v',
+                       target_bit_rate,
+                       '-max_muxing_queue_size', '1500', '-movflags', '+faststart', '-f', 'mp4', '-y',
+                       "%s" % output_file]
             else:
                 cmd = [
-                    'ffmpeg -i "%s" -c:v h264 -preset fast -b:v %s -c:a aac -b:a 192k -ac 6 '
+                    'ffmpeg -i "%s" -map 0:V:? -c:v h264 -preset fast -b:v %s '
                     '-max_muxing_queue_size 1500 -movflags +faststart -f mp4 -y "%s"' % (
-                        src, target_bit_rate, output_tmp)]
-
+                        input_file, target_bit_rate, output_file)]
     logger.info('cmd = %s', cmd)
-    # print(cmd)
     params = cmd
-    # print(" ".join(params))
     ret = True
     try:
-        # do transcode
-        subprocess.check_output(
-            params, shell=shell, stdin=None, stderr=subprocess.STDOUT, timeout=timeout)
+        subprocess.check_output(params, shell=shell, stdin=None, stderr=subprocess.STDOUT, timeout=timeout)
     except BaseException as e:
-        # print(e)
         ret = False
         logger.warning('transcode failed %s params=[%s]', e, params)
+    if decode_mode and not ret:
+        logger.info(f'try again, dont use decode mode')
+        ret = process_video(input_file, output_file, media_info, offset, duration, target_lang, shell,
+                            copy_mode=copy_mode,
+                            gpu=gpu, mp4=mp4, timeout=7200, decode_mode=False)
+    return ret, output_file
 
-    if ret and os.path.exists(output_tmp):
-        if have_4k and add_dolby and (all_ac3_list or audio_index_list):
-            transcode_options = ["-vn", "-acodec", "ac3", "-ab", "192k"]
-            if all_ac3_list:
-                ac3_list = list(all_ac3_list)
+
+def check_file_duration(file, video_duration):
+    result = True
+    file_duration = int(float(ffprobe_get_media_duration(file)))
+    # 时长差大于60s或者等于0s, 说明文件存在异常
+    if abs(video_duration - file_duration) >= 60 or file_duration == 0:
+        result = False
+    logger.info(f'Original video duration={video_duration}')
+    logger.info(f'Check {file} duration({file_duration}), result={result}')
+    return result
+
+
+def process_audio(input_file, output, media_info, shell, timeout=3600, add_dolby=True, **kwargs):
+    '''
+    1. 大于400k的转成320k, 反之copy
+    2. 当音频声道数大于6需要改成2声道
+    3. channel codec 处理:
+        3.1. 有不是ac3和aac的音轨, 转成aac, 并添加ac3
+            Stream #0:1 dts
+            ffmpeg -i input_file -map 0:1 -vn -acodec aac -f mp4 -y output
+            ffmpeg -i input_file -map 0:1 -vn -acodec ac3 -f mp4 -y output_ac3
+        3.2. 已有ac3, 直接copy过去
+            Stream #0:1 aac
+            Stream #0:2 ac3
+            ffmpeg -i input_file -map 0:1 -map 0:2 -vn -acodec copy -f mp4 -y output
+        3.3. 只有ac3, 需要先转成aac, 并添加ac3
+            Stream #0:1 ac3
+            Stream #0:2 ac3
+            ffmpeg -i input_file -map 0:1 -map 0:2 -vn -acodec aac -f mp4 -y output
+            ffmpeg -i input_file -map 0:1 -map 0:2 -vn -acodec ac3 -f mp4 -y output_ac3
+        3.4. 只有aac, 没有ac3, copy aac添加ac3 channel
+            Stream #0:1 aac
+            Stream #0:2 aac
+            ffmpeg -i input_file -map 0:1 -map 0:2 -vn -acodec copy -f mp4 -y output
+            ffmpeg -i input_file -map 0:1 -map 0:2 -vn -acodec ac3 -f mp4 -y output_ac3
+    :param input_file: input file
+    :param output: target output path
+    :param media_info: input file media info
+    :param shell: whether is shell
+    :param timeout: maximum timeout setting
+    :param add_dolby: whether to add dolby
+    :param kwargs:
+    :return:
+    '''
+    video_duration = kwargs.get('video_duration', 0)
+    output_ac3_tmp = f'{output}.ac3.tmp'
+
+    ac3_index_list = set(
+        map(lambda stream: stream['index'] if stream['codec_name'].startswith('ac3') else -1, media_info['stream']))
+    eac3_index_list = set(
+        map(lambda stream: stream['index'] if stream['codec_name'].startswith('eac3') else -1, media_info['stream']))
+    aac_index_list = set(
+        map(lambda stream: stream['index'] if stream['codec_name'].find('aac') >= 0 else -1, media_info['stream']))
+    audio_index_list = set(
+        map(lambda stream: stream['index'] if stream['codec_type'].startswith('audio') else -1, media_info['stream']))
+    ac3_index_list.discard(-1)
+    eac3_index_list.discard(-1)
+    aac_index_list.discard(-1)
+    audio_index_list.discard(-1)
+    all_ac3_list = list(ac3_index_list) + list(eac3_index_list)
+
+    # 如果aac_index_list为空, 并且all_ac3_list的长度等于所有音轨的数量, 说明只有ac3/eac3音轨
+    only_have_ac3 = False
+    if not aac_index_list and len(all_ac3_list) == len(audio_index_list):
+        only_have_ac3 = True
+
+    '''
+    1. acodec_mode控制是否转aac, 1代表需要转成aac, 0则不转
+    2. 当只有ac3音轨或者有其他音轨的时候acodec_mode为 1, 需要转成aac.
+    '''
+    audio_state_list = []
+    for stream in media_info['stream']:
+        if stream['codec_type'].startswith('audio'):
+            audio_state_dic = {'audio_index': stream['index'], 'codec_name': stream['codec_name']}
+            if only_have_ac3:
+                audio_state_dic['acodec_mode'] = 1
             else:
-                ac3_list = list(audio_index_list)
-
-            '''
-             we add all ac3 channels for the 
-             1 gen output_ac3_tmp for ac3 channels,transcode eac3 to ac3
-             2 combine output_tmp and output_ac3_tmp to output_full_name
-             3 remove output_tmp and output_ac3_tmp
-            '''
-            # ffmpeg -i input.mp4 -vn -acodec ac3 -ab 384k -y output.mp4
-            ac3_options = []
-            for ac3_index in ac3_list:
-                ac3_options.append('-map')
-                ac3_options.append(f'0:{ac3_index}')
-            ac3_options += transcode_options
-            ac3_options += ["-f", "mp4", "-y"]
-            if not shell:
-                cmd = ['ffmpeg', '-i', src] + ac3_options + [output_ac3_tmp]
-            else:
-                ac3_options = ' '.join(ac3_options)
-                cmd = f'ffmpeg -i "{src}" {ac3_options} "{output_ac3_tmp}"'
-
-            logger.info('gen ac3 cmd = %s', cmd)
-            try:
-                # gen ac3
-                subprocess.check_output(
-                    cmd, shell=shell, stdin=None, stderr=subprocess.STDOUT, timeout=timeout)
-            except BaseException as e:
-                # print(e)
-                ret = False
-                logger.warning(
-                    'transcode gen ac3 failed %s params=[%s]\n %s', e, cmd, ' '.join(cmd))
-                logger.warning(f'{traceback.print_exc()}')
-            if ret and os.path.exists(output_ac3_tmp):
-                # ffmpeg -i MP4_HPL40_30fps_channel_id_51_dolby.mp4 -i b.mp4 -map 0:v:? -map 0:a -map 1:a  -c copy  -f mp4 -y c.mp4
-                # add origin ac3 tracks to output
-                combine_options = ['-map', '0:V:?', '-map', '0:a',
-                                   '-map', '1:a', "-c", "copy", "-f", 'mpegts', '-y']
-                if not shell:
-                    cmd = ['ffmpeg', '-i', output_tmp, '-i',
-                           output_ac3_tmp] + combine_options + [output_full_name]
+                # 如果有其他音轨或者有eac3音轨存在就需要转成aac
+                if (stream['codec_name'].find('aac') < 0 and stream['codec_name'].find('ac3') < 0) or stream[
+                    'codec_name'].startswith('eac3'):
+                    audio_state_dic['acodec_mode'] = 1
                 else:
-                    combine_options = ' '.join(combine_options)
-                    cmd = f'ffmpeg -i "{output_tmp}" -i "{output_ac3_tmp}" {combine_options} "{output_full_name}"'
-
-                logger.info('combine cmd = %s', cmd)
-                try:
-                    # do combine
-                    subprocess.check_output(
-                        cmd, shell=shell, stdin=None, stderr=subprocess.STDOUT, timeout=timeout)
-                except BaseException as e:
-                    # print(e)
-                    ret = False
-                    logger.warning(
-                        'transcode combine failed %s params=[%s]\n %s', e, cmd, ' '.join(cmd))
-
-                    logger.warning(f'{traceback.print_exc()}')
+                    audio_state_dic['acodec_mode'] = 0
+            audio_state_dic['origin_bit_rate'] = stream['bit_rate']
             try:
-                os.remove(output_tmp)
+                audio_state_dic['channels'] = int(stream['channels']) if stream[
+                                                                             'channels'] and 'channels' in stream.keys() else 0
             except BaseException as e:
-                logger.warning(f"remove output_tmp error {e}")
+                audio_state_dic['channels'] = 0
+            audio_state_dic['more_six_channel'] = 1 if int(stream['channels']) > SUPPORT_CHANNEL_NUMBER else 0
+            audio_state_list.append(audio_state_dic)
 
-            try:
-                os.remove(output_ac3_tmp)
-            except BaseException as e:
-                logger.warning(f"remove output_ac3_tmp error {e}")
+    audio_src_list = []
+    audio_process_result = False
+    for audio_state in audio_state_list:
+        audio_src_dic = {}
+        bit_rate = AAC_BIT_RATE_MINIMUM
+        audio_src_dic['target_codec_name'] = 'aac' if audio_state['acodec_mode'] == 1 else audio_state['codec_name']
+        audio_tracks_list = [audio_state['audio_index']]
+        audio_tmp = f'{output}_{audio_src_dic["target_codec_name"]}_{audio_state["audio_index"]}.tmp'
+        # bit_mode = audio_state['bit_mode']
+        channels = int(audio_state['channels'])
+        origin_bit_rate = int(audio_state['origin_bit_rate'])
+        # more_six_channel = audio_state['more_six_channel']
+        '''
+        aac: 声道为立体声, 原码率小于128修改为128, 大于128小于400修改为192, 大于400修改为320
+        ac3: 两声道的码率为192, 大于等于六声道修改为六声道码率为320, 声道数不知道则为六声道码率为320
+        '''
+        if audio_src_dic["target_codec_name"].find('aac') >= 0:
+            channels = 2
+            if origin_bit_rate < AAC_BIT_RATE_MINIMUM:
+                bit_rate = BITE_RATE_MIINIMUM
+            elif origin_bit_rate < AAC_BIT_RATE_MAX:
+                bit_rate = BITE_RATE_MEDIUM
+            else:
+                bit_rate = BITE_RATE_MAX
+        if audio_src_dic["target_codec_name"].find('ac3') >= 0:
+            if not channels:
+                channels = 6
+                bit_rate = BITE_RATE_MAX
+            else:
+                if channels <= 2:
+                    channels = 2
+                    bit_rate = BITE_RATE_MEDIUM
+                elif channels >= 6:
+                    channels = 6
+                    bit_rate = BITE_RATE_MAX
+
+        audio_process_result = ffmpeg_audio_tracks_process(input_file, audio_tmp, audio_tracks_list, shell,
+                                                           bit_rate=bit_rate, timeout=timeout, channels=channels,
+                                                           target_codec=audio_src_dic["target_codec_name"])
+        if audio_process_result:
+            # 检查转码完成的文件时长是否异常
+            check_audio_ret = check_file_duration(audio_tmp, video_duration)
+            if not check_audio_ret:
+                audio_process_result = False
+                break
+            audio_src_dic['src'] = audio_tmp
+            audio_src_list.append(audio_src_dic)
         else:
-            # rename the out to
-            shutil.move(output_tmp, output_full_name)
+            break
+    if audio_process_result:
+        # 排序: 将aac排在前面, ac3在后面
+        for i in range(len(audio_src_list)):
+            for j in range(0, len(audio_src_list) - i - 1):
+                if audio_src_list[j]['target_codec_name'] != 'aac':
+                    audio_src_list[j], audio_src_list[j + 1] = audio_src_list[j + 1], audio_src_list[j]
 
-    return ret
+        # 当只有ac3或者没有ac3音轨的时候, 添加ac3 channel
+        gen_ac3_ret = False
+        if not all_ac3_list or only_have_ac3:
+            gen_ac3_ret = gen_ac3_audio(input_file, output_ac3_tmp, all_ac3_list, audio_index_list, shell,
+                                        add_dolby=add_dolby)
+        if gen_ac3_ret:
+            audio_src_list.append({'target_codec_name': 'ac3', 'src': output_ac3_tmp})
+
+    return audio_src_list, audio_process_result
+
+
+'''
+subtitle_mode:0 没有subtitle
+subtitle_mode:1 有外部的.idx\.sub格式subtitle
+subtitle_mode:2 有外部的.srt格式subtitle
+subtitle_mode:3 有内部.srt/.ass格式subtitle
+优先级 1 > 2 >3
+'''
+
+
+def transcode(src, output, gpu=True, offset=0.0, duration=0.0, copy_mode=False, mp4=False,
+              target_lang={'iso639_1': 'en', 'iso639_2': 'eng'}, timeout=7200, add_dolby=True, decode_mode=True):
+    '''
+    1. process_video 对视频进行copy or transcode处理
+    2. process_audio 对音轨进行copy or transcode处理
+    3. ffmpeg_combine_video_audio 将处理好的视频和音轨进行合并
+    :param src: source file
+    :param output: output file
+    :param gpu: whether to use GPU
+    :param offset:
+    :param duration:
+    :param copy_mode: prefer copy mode if video codec is h264 or h265, otherwise will transcod to h265
+    :param mp4:
+    :param target_lang:
+    :param timeout: maximum timeout setting
+    :param add_dolby: whether to add dolby
+    :return:
+    '''
+    output_full_name = output
+    output_tmp = output + '.tmp'
+    video_tmp = output + '.video'
+    media_info = ffprobe_get_media_info(src)
+    if 'format' not in media_info or 'stream' not in media_info:
+        raise Exception('invalid param file=%s' % (src))
+    video_duration = int(float(media_info['format']['duration']))
+    if video_duration <= 0:
+        raise Exception(f'video duration({video_duration}) error')
+
+    os_type = platform.system()
+    shell = False if os_type.startswith('Windows') else True
+
+    video_ret, video_src = process_video(src, video_tmp, media_info, offset, duration, target_lang, shell,
+                                         copy_mode=copy_mode, gpu=gpu, mp4=mp4, decode_mode=decode_mode)
+
+    audio_src_list = []
+    audio_process_result = False
+    if video_ret:
+        audio_src_list, audio_process_result = process_audio(src, output, media_info, shell, timeout=timeout,
+                                                             add_dolby=add_dolby, video_duration=video_duration)
+    if audio_src_list and isinstance(audio_src_list[0], dict):
+        audio_src_list = [i['src'] for i in audio_src_list]
+
+    combine_ret = False
+    if video_ret and audio_src_list and audio_process_result:
+        combine_ret = ffmpeg_combine_video_audio(video_src, audio_src_list, output_tmp, shell)
+    else:
+        logger.warning(f'process video or audio error, video_ret={video_ret}, audio_ret={audio_process_result}')
+
+    if combine_ret:
+        shutil.move(output_tmp, output_full_name)
+    try:
+        os.remove(video_tmp)
+    except BaseException as e:
+        logger.warning(f'remove video tmp error {e}')
+    for audio_tmp in audio_src_list:
+        try:
+            os.remove(audio_tmp)
+        except BaseException as e:
+            logger.warning(f'remove audio tmp error {e}')
+    return combine_ret
 
 
 def ffmpeg_download(url, output, ffmpeg_path, ts=True, timeout=3600,
@@ -573,12 +797,10 @@ def ffmpeg_download(url, output, ffmpeg_path, ts=True, timeout=3600,
             ffm_path, "-user-agent", useragent, '-i', url, '-c', 'copy', '-f', mode, '-y', output]
     logger.info('Start download %s', params)
     try:
-        subprocess.check_output(
-            params, shell=shell, stdin=None, stderr=subprocess.STDOUT, timeout=timeout)
+        subprocess.check_output(params, shell=shell, stdin=None, stderr=subprocess.STDOUT, timeout=timeout)
     except BaseException as e:
         ret = False
-        logger.warning(
-            'download url %s to %s failed %s params=[%s]', url, output, e, params)
+        logger.warning('download url %s to %s failed %s params=[%s]', url, output, e, params)
     end_time = time.time()
     downloaded_time = end_time - start_time
     actul_dur = ffprobe_get_media_duration(output)
@@ -592,13 +814,11 @@ def ffmpeg_download(url, output, ffmpeg_path, ts=True, timeout=3600,
 # ffprobe -i "e:\media\国王的演讲(粤语)" -show_entries format=duration
 def ffprobe_get_media_duration(file):
     logger.info('Getting {} duration'.format(file))
-    params = ['ffprobe', '-show_entries', 'format=duration',
-              '-v', 'quiet', '-of', 'csv=p=0', '-i']
+    params = ['ffprobe', '-show_entries', 'format=duration', '-v', 'quiet', '-of', 'csv=p=0', '-i']
     shell, params = __build_params(params, file)
     # params = ['ffprobe -show_entries format=duration -v quiet -of csv=p=0 -i "{file}"'.format(file=file)]
     try:
-        dur = float(subprocess.check_output(params, shell=shell,
-                                            stdin=None, stderr=subprocess.STDOUT).decode().strip())
+        dur = float(subprocess.check_output(params, shell=shell, stdin=None, stderr=subprocess.STDOUT).decode().strip())
     except BaseException as e:
         logger.warning(f"ffprobe_get_media_duration {e}")
         dur = UNKNOW_SIZE
@@ -680,7 +900,7 @@ def ffprobe_get_subtitle_with_index(file, target_lang):
             index = 0
             for stream in sub_streams:
                 if 'tags' in stream.keys() and 'language' in stream['tags'] and stream['tags'][
-                        'language'] == target_lang:
+                    'language'] == target_lang:
                     subtitle_index = index
                     break
                 index += 1
@@ -731,7 +951,7 @@ def subtitles_to_srt(file, shell=True):
     ext = '.srt'
     new_name = name_without_ext + ext
     if os.path.exists(new_name):
-        ext = f".srt_temp"
+        ext = f"{_}.srt"
         new_name = name_without_ext + ext
     if not not shell:
         params = ['ffmpeg -i "%s" "%s"' % (file, new_name)]
@@ -891,13 +1111,12 @@ def ffprobe_get_media_info(file_path, timeout=60):
                         stream['width'] = sub_stream['width']
                         stream['height'] = sub_stream['height']
                         video_num += 1
-                        have_264_hevc = have_264_hevc or is_avc_or_hevc_codec(
-                            sub_stream['codec_name'])
-                        have_hevc = have_hevc or is_hevc_codec(
-                            sub_stream['codec_name'])
+                        have_264_hevc = have_264_hevc or is_avc_or_hevc_codec(sub_stream['codec_name'])
+                        have_hevc = have_hevc or is_hevc_codec(sub_stream['codec_name'])
                         have_4k = have_4k or is_4k_video(sub_stream['width'])
                     elif sub_stream['codec_type'] == "audio":
                         stream['sample_rate'] = sub_stream['sample_rate'] if 'sample_rate' in sub_stream else ''
+                        stream['bit_rate'] = sub_stream['bit_rate'] if 'bit_rate' in sub_stream else '0'
                         stream['channels'] = sub_stream['channels'] if 'channels' in sub_stream else 2
                         stream['channel_layout'] = sub_stream[
                             'channel_layout'] if 'channel_layout' in sub_stream else ''
@@ -950,8 +1169,7 @@ def ffmpeg_extract_subtitles_with_index(input, output_file, index):
                                                                                    output=tmp_file)]
     print(params)
     try:
-        subprocess.check_output(
-            params, shell=shell, stdin=None, stderr=subprocess.STDOUT).decode().strip()
+        subprocess.check_output(params, shell=shell, stdin=None, stderr=subprocess.STDOUT).decode().strip()
         if os.path.exists(tmp_file) and os.path.getsize(tmp_file) > 0x400:
             shutil.move(tmp_file, output_file)
             result = True
@@ -964,8 +1182,7 @@ def ffmpeg_extract_subtitles_with_index(input, output_file, index):
 
         logger.info('exception %s', exception)
 
-    logger.info('ffmpeg_extract_subtitles_with_index (input,output,result)=%s,%s,%s',
-                input, output_file, result)
+    logger.info('ffmpeg_extract_subtitles_with_index (input,output,result)=%s,%s,%s', input, output_file, result)
     return result
 
 
@@ -983,7 +1200,7 @@ def ffprobe_channel_alive(url, timeout=30):
         if "format" in ff_media_info and "format_name" in ff_media_info['format'] \
                 and ((ff_media_info['format']['format_name'] == "mpegts" and ff_media_info['format']['size'] == '0')
                      or (ff_media_info['format']['format_name'] == "hls" and ff_media_info['format']['size'] != '0')
-                     ) \
+        ) \
                 and ff_media_info['stream']:
             streams = ff_media_info['stream']
             for stream in streams:
@@ -1029,13 +1246,11 @@ def ffmpeg_extrat_subtitles(input, out_path):
                     subtitle_lang = stream['tags']['language']
 
                 subtitle_ext = '.srt_' + subtitle_lang
-                output_file = os.path.join(
-                    out_path, input_file_name_without_ext + subtitle_ext)
+                output_file = os.path.join(out_path, input_file_name_without_ext + subtitle_ext)
                 # print('will call ffmpeg_extract_subtitles_with_index=', input,output_file,subtitle_index)
                 if os.path.exists(output_file):
                     continue
-                res = ffmpeg_extract_subtitles_with_index(
-                    input, output_file, subtitle_index)
+                res = ffmpeg_extract_subtitles_with_index(input, output_file, subtitle_index)
                 if res:
                     subtitle_info = {}
                     subtitle_info['language'] = subtitle_lang
@@ -1044,12 +1259,12 @@ def ffmpeg_extrat_subtitles(input, out_path):
                     subtitle_info['path'] = output_file
                     subtitle_list.append(subtitle_info)
 
+
     except BaseException as e:
         logger.debug("traceback %s", traceback.format_exc())
         have_subtitle = False
 
-    logger.info("have_subtitle {} {} subtitle_list={}".format(
-        have_subtitle, input, subtitle_list))
+    logger.info("have_subtitle {} {} subtitle_list={}".format(have_subtitle, input, subtitle_list))
     return have_subtitle, subtitle_list
 
 
@@ -1109,11 +1324,9 @@ def file_mime_encoding(file, backup=True, **kwargs):
         s = open(file, 'rb').read()
         mime_encoding = chardet.detect(s)['encoding']
         # if not not mime_encoding and not mime_encoding.lower().startswith('utf-8'):
-        logger.info(
-            '*********************************************************************')
+        logger.info('*********************************************************************')
         logger.info('mime encodinng: %s' % mime_encoding)
-        logger.info(
-            '*********************************************************************')
+        logger.info('*********************************************************************')
         if not not mime_encoding:
             if backup_path:
                 name_es = os.path.basename(file)
@@ -1130,8 +1343,7 @@ def file_mime_encoding(file, backup=True, **kwargs):
             # iconv -f ' utf-8' -t 'utf-8' '/mnt/udisk/bludv_movie/Mãe! 2017 (720p) WWW.BLUDV.COM/Mae.2017.720p.BluRay.6CH.x264.DUAL-WWW.BLUDV.COM.srt' -o 11
             params = ['iconv -f {mime_encoding} -t utf-8 "{input}" -o "{output}"'.format(mime_encoding=mime_encoding,
                                                                                          input=file, output=tmp_name)]
-            logger.info('will convert to utf-8 from %s,filename %s,backup %s',
-                        mime_encoding, file, backup)
+            logger.info('will convert to utf-8 from %s,filename %s,backup %s', mime_encoding, file, backup)
             info = str(subprocess.check_output(params, shell=True, stdin=None,
                                                stderr=subprocess.STDOUT).decode().strip()).lower()
             logger.info('file_mime_encoding iconv= %s', info)
@@ -1141,8 +1353,7 @@ def file_mime_encoding(file, backup=True, **kwargs):
                 else:
                     os.remove(file)
                     logger.info('file_mime_encoding remove old =%s', file)
-                logger.info('rename from %s to %s, backup=%s',
-                            tmp_name, file, backup)
+                logger.info('rename from %s to %s, backup=%s', tmp_name, file, backup)
                 shutil.move(tmp_name, file)
                 mime_encoding = 'utf-8'
             else:
@@ -1181,8 +1392,7 @@ def test():
     print('have_sub={0}, subtitle_index={1}'.format(have_sub, index))
     # ffprobe_get_subtitle_with_index("E:\\media\\test_transecoder\\American.mp4",'por')
     get_srt_subtitle_file("E:\\media\\test_transecoder\\MultipleSubtitle3.mkv")
-    get_sub_idx_subtitle_file(
-        "E:\\media\\test_transecoder\\American.mp4", 'pt')
+    get_sub_idx_subtitle_file("E:\\media\\test_transecoder\\American.mp4", 'pt')
     transcode("E:\\media\\test_transecoder\\American.mp4", "E:\\media\\test_transecoder\\American.ts", gpu=True,
               target_lang={'iso639_1': 'en', 'iso639_2': 'eng'})
     transcode("E:\\media\\test_transecoder\\American.mp4", "E:\\media\\test_transecoder\\American.ts", gpu=True,
