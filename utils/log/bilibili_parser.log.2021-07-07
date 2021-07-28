@@ -1,0 +1,13 @@
+[2021-07-06 20:24:05,726 bilibli_parse.py][line:36] [8992-MainThread-50840:] INFO     cookies_path: D:\Git_proj\KinYoshi\utils\cookies\bilibili.txt
+[2021-07-06 20:24:08,039 connectionpool.py][line:941] [8992-MainThread-50840:] DEBUG    Starting new HTTPS connection (1): www.bilibili.com:443
+[2021-07-06 20:24:08,999 connectionpool.py][line:442] [8992-MainThread-50840:] DEBUG    https://www.bilibili.com:443 "GET /bangumi/play/ss32388/ HTTP/1.1" 200 None
+[2021-07-07 14:32:33,437 bilibli_parse.py][line:36] [60240-MainThread-61564:] INFO     cookies_path: D:\Git_proj\KinYoshi\utils\cookies\bilibili.txt
+[2021-07-07 14:32:35,511 connectionpool.py][line:941] [60240-MainThread-61564:] DEBUG    Starting new HTTPS connection (1): www.bilibili.com:443
+[2021-07-07 14:32:36,387 connectionpool.py][line:442] [60240-MainThread-61564:] DEBUG    https://www.bilibili.com:443 "GET /bangumi/play/ss34224?bsource=baidu_aladdin HTTP/1.1" 200 None
+[2021-07-07 14:32:36,401 connectionpool.py][line:941] [60240-MainThread-61564:] DEBUG    Starting new HTTPS connection (1): api.bilibili.com:443
+[2021-07-07 14:32:36,539 connectionpool.py][line:442] [60240-MainThread-61564:] DEBUG    https://api.bilibili.com:443 "GET /pgc/player/web/playurl?cid=184920035&qn=116&type=&otype=json&fourk=1&bvid=BV1jt4y1m7an&ep_id=334896&fnver=0&fnval=80&session=08658c0614521439332e22c68dfb7857 HTTP/1.1" 200 None
+[2021-07-07 14:32:58,290 bilibli_parse.py][line:36] [65140-MainThread-58816:] INFO     cookies_path: D:\Git_proj\KinYoshi\utils\cookies\bilibili.txt
+[2021-07-07 14:32:58,925 connectionpool.py][line:941] [65140-MainThread-58816:] DEBUG    Starting new HTTPS connection (1): www.bilibili.com:443
+[2021-07-07 14:32:59,746 connectionpool.py][line:442] [65140-MainThread-58816:] DEBUG    https://www.bilibili.com:443 "GET /bangumi/play/ss34224?bsource=baidu_aladdin HTTP/1.1" 200 None
+[2021-07-07 14:32:59,751 connectionpool.py][line:941] [65140-MainThread-58816:] DEBUG    Starting new HTTPS connection (1): api.bilibili.com:443
+[2021-07-07 14:33:00,112 connectionpool.py][line:442] [65140-MainThread-58816:] DEBUG    https://api.bilibili.com:443 "GET /pgc/player/web/playurl?cid=184920035&qn=116&type=&otype=json&fourk=1&bvid=BV1jt4y1m7an&ep_id=334896&fnver=0&fnval=80&session=08658c0614521439332e22c68dfb7857 HTTP/1.1" 200 None

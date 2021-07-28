@@ -420,7 +420,7 @@ if __name__ == '__main__':
     #             thread_num=10)
     #     time.sleep(.5)
     m3u8_url = 'https://www.mp4er.com/10E79044B82A84F70BE1308FFA5232E45E1BF4AD728091C9ED8951D43C5C7BE0240C4FF83F4998C573360D5AB221161D.m3u8'
-    IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\7-27.ts',
+    IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\7-27-2.ts',
                         headers=headers, thread_num=1)
     # pm = ParseM3u8()
     # pm.start(m3u8_url, f'E:\\YunBo\\6-25-2.ts')

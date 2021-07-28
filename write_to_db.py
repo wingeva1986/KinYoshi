@@ -262,24 +262,24 @@ if __name__ == '__main__':
     # db_handle = db.media_asserts_info_iqiyi
 
     # for i in url_list:
-    for i in range(1, 17):
-        url = f'https://www.bilibili.com/video/BV1ZE411Q79a?p={i}'
-        # url = i["url"]
-        seq_num = f'{i}'
-        # if i < 10:
-        #     seq_num = f'0{i}'
-        # else:
-        #     seq_num = str(i)
-        data = generate_media_assets('小森林', douban_id='33464504', seq_num=seq_num,
-                                     download_url=url, language='韩语', episode_name=f'小森林.{seq_num}')
-        data.pop('download_state')
-        print(data)
-        insert_to_db(db_handle, data)
+    # for i in range(1, 17):
+    #     url = f'https://www.bilibili.com/video/BV1ZE411Q79a?p={i}'
+    #     # url = i["url"]
+    #     seq_num = f'{i}'
+    #     # if i < 10:
+    #     #     seq_num = f'0{i}'
+    #     # else:
+    #     #     seq_num = str(i)
+    #     data = generate_media_assets('小森林', douban_id='33464504', seq_num=seq_num,
+    #                                  download_url=url, language='韩语', episode_name=f'小森林.{seq_num}')
+    #     data.pop('download_state')
+    #     print(data)
+    #     insert_to_db(db_handle, data)
 
-    name = '新兵正传2'
-    douban_id = '21356476'
+    name = '加油,李先生'
+    douban_id = '30168156'
     # insert_tv_series(db_handle, name, douban_id, 6, episode_name=name)
-    # insert_movie_data(db_handle, name, douban_id, episode_name=name)
+    insert_movie_data(db_handle, name, douban_id, episode_name=name)
     # insert_to_db(db_handle, key_map)
 
     from Crypto.Cipher import AES

@@ -30,3 +30,38 @@ Traceback (most recent call last):
   File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 41, in control
     dirname_tmp = self.TMP_DIR / dirname.name / f"{filename}文件夹"
 AttributeError: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+[2021-07-05 19:35:32,785 test_m3u8_downloader.py][line:96] [25848-MainThread-7544:] INFO     headers -> {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36'}
+[2021-07-05 19:36:26,301 test_m3u8_downloader.py][line:96] [26228-MainThread-25692:] INFO     headers -> {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36'}
+[2021-07-05 19:37:24,406 test_m3u8_downloader.py][line:96] [25356-MainThread-21532:] INFO     headers -> {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36'}
+[2021-07-05 19:37:30,626 bde4_downloader.py][line:32] [25356-MainThread-21532:] ERROR    下载失败: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+Traceback (most recent call last):
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 30, in bde4_download
+    return imd.download(urls, filepath, keys=keys, chunk_size=chunk_size, wipe_cache=wipe_cache)
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 41, in control
+    dirname_tmp = self.TMP_DIR / dirname.name / f"{filename}文件夹"
+AttributeError: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+[2021-07-05 19:37:50,737 test_m3u8_downloader.py][line:96] [25348-MainThread-26172:] INFO     headers -> {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36'}
+[2021-07-05 19:41:39,699 bde4_downloader.py][line:32] [25348-MainThread-26172:] ERROR    下载失败: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+Traceback (most recent call last):
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 30, in bde4_download
+    return imd.download(urls, filepath, keys=keys, chunk_size=chunk_size, wipe_cache=wipe_cache)
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 41, in control
+    dirname_tmp = self.TMP_DIR / dirname.name / f"{filename}文件夹"
+AttributeError: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+[2021-07-05 19:43:12,668 test_m3u8_downloader.py][line:96] [25472-MainThread-24980:] INFO     headers -> {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36'}
+[2021-07-05 19:43:22,850 bde4_downloader.py][line:32] [25472-MainThread-24980:] ERROR    下载失败: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+Traceback (most recent call last):
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 30, in bde4_download
+    return imd.download(urls, filepath, keys=keys, chunk_size=chunk_size, wipe_cache=wipe_cache)
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 41, in control
+    dirname_tmp = self.TMP_DIR / dirname.name / f"{filename}文件夹"
+AttributeError: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+[2021-07-05 19:43:35,100 test_m3u8_downloader.py][line:96] [24356-MainThread-20520:] INFO     headers -> {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36'}
+[2021-07-05 19:44:11,823 bde4_downloader.py][line:32] [24356-MainThread-20520:] ERROR    下载失败: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+Traceback (most recent call last):
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 30, in bde4_download
+    return imd.download(urls, filepath, keys=keys, chunk_size=chunk_size, wipe_cache=wipe_cache)
+  File "d:\Git_proj\KinYoshi\bde4_downloader.py", line 41, in control
+    dirname_tmp = self.TMP_DIR / dirname.name / f"{filename}文件夹"
+AttributeError: 'Bde4Downloader' object has no attribute 'TMP_DIR'
+[2021-07-05 19:44:26,936 test_m3u8_downloader.py][line:96] [24700-MainThread-25252:] INFO     headers -> {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36'}
