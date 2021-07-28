@@ -419,10 +419,51 @@ if __name__ == '__main__':
     #             f'E:\\YunBo\\龙珠超国语版.{episode_num}.ts',
     #             thread_num=10)
     #     time.sleep(.5)
-    m3u8_url = 'https://www.mp4er.com/10E79044B82A84F70BE1308FFA5232E45E1BF4AD728091C9ED8951D43C5C7BE0240C4FF83F4998C573360D5AB221161D.m3u8'
-    IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\7-27-2.ts',
-                        headers=headers, thread_num=1)
+    # m3u8_url = 'https://www.mp4er.com/10E79044B82A84F70BE1308FFA5232E45E1BF4AD728091C9ED8951D43C5C7BE0240C4FF83F4998C573360D5AB221161D.m3u8'
+    # IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\7-27-2.ts',
+    #                     headers=headers, thread_num=1)
     # pm = ParseM3u8()
     # pm.start(m3u8_url, f'E:\\YunBo\\6-25-2.ts')
 
+    '''
+    Stream #0:1 aac chi
+    Stream #0:2 ac3 eng
+    Stream #0:3 aac eng
+    '''
+    # 如何知道某一种语言只有ac3/aac?
+    audio_info_list = [
+        {'audio_index': '1', 'codec_name': 'ac3', 'language': 'chi'},
+        # {'audio_index': '2', 'codec_name': 'aac', 'language': 'eng'},
+        {'audio_index': '3', 'codec_name': 'ac3', 'language': 'eng'},
+        # {'audio_index': '4', 'codec_name': 'aac', 'language': 'chi'},
+    ]
+    language_state = {}
+    for info in audio_info_list:
+        if info['language'] not in language_state.keys():
+            language_state[info['language']] = {}
+        
+        if 'has_aac' not in language_state[info['language']].keys() or not language_state[info['language']]['has_aac'][0]:
+            language_state[info['language']]['has_aac'] = (True, info['audio_index']) if info['codec_name'].find('aac') >= 0 else (False, info['audio_index'])
+        
+        if 'has_ac3' not in language_state[info['language']].keys() or not language_state[info['language']]['has_ac3'][0]:
+            language_state[info['language']]['has_ac3'] = (True, info['audio_index']) if info['codec_name'].find('ac3') >= 0 else (False, info['audio_index'])
 
+    trans_aac_list = []
+    get_ac3_list = []
+    for key, value in language_state.items():
+        print(value)
+        has_aac_tuple = value['has_aac']
+        has_ac3_tuple = value['has_ac3']
+        if has_aac_tuple[0] and has_ac3_tuple[0]:
+            both_have = True
+        else:
+            if not has_aac_tuple[0]:
+                only_has_ac3 = True
+                trans_aac_list.append(has_aac_tuple[1])
+                get_ac3_list.append(has_aac_tuple[1])
+            else:
+                only_has_aac = True
+                get_ac3_list.append(has_aac_tuple[1])
+
+    print(f'需要转换成aac: {trans_aac_list}')
+    print(f'需要生成ac3:{get_ac3_list}')
