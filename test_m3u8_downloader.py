@@ -11,7 +11,8 @@ import logging
 import time
 import zlib
 import pymongo
-from scrapy import Selector
+import base64
+from scrapy import Selector, selector
 from abc import ABCMeta, abstractmethod
 
 import m3u8
@@ -351,6 +352,80 @@ class ParseM3u8:
         os.rename("new.tmp", filename)
         os.system('cls')
 
+def __jx_api(url_param: str):
+    download_url = ''
+    headers = {
+        # 'Connection': 'keep-alive',
+        # 'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
+        # 'sec-ch-ua-mobile': '?0',
+        'User-Agent': choice_agent(),
+        # 'Accept': '*/*',
+        # 'Sec-Fetch-Site': 'cross-site',
+        # 'Sec-Fetch-Mode': 'cors',
+        # 'Sec-Fetch-Dest': 'empty',
+        # 'Accept-Language': 'zh-CN,zh;q=0.9',
+    }
+    api_url = 'https://jx5.178du.com/8090/jiexi/api.php'
+    data = {
+        'url': url_param,
+        'referer': 'aHR0cHM6Ly9qeC4xNzhkdS5jb20v',
+    }
+    logger.info(f'Request(method[POST]) {api_url}')
+    try:
+        response = requests.post(api_url, data=data, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            download_url = data['url'] if data['code'] == 200 else ''
+            logger.info(f'Get -> {download_url}')
+            if download_url.endswith('.html'):
+                logger.info(f'Request {download_url}')
+                response = requests.get(download_url, headers=headers)
+                selector = Selector(text=response.text)
+                jx_api_url = selector.xpath('//iframe/@src').get()
+                logger.info(f'Get -> {jx_api_url}')
+                if not jx_api_url.startswith('http'):
+                    jx_api_url = '/'.join(download_url.split('/')
+                                            [:3]) + '/' + jx_api_url
+                    logger.info(f'Request {jx_api_url}')
+                    jx_api_res = requests.get(jx_api_url, headers={
+                        'user-agent': choice_agent(),
+                        'referer': download_url
+                    })
+                    params_pattern = re.compile(
+                        r'\$\.post\("api.php",({.*?}),', re.S).search(jx_api_res.text)
+                    params_str = params_pattern.group(
+                        1) if params_pattern else ''
+                    api_url = '/'.join(jx_api_res.url.split('/')
+                                        [:4]) + '/api.php'
+
+                    params_url = re.findall(
+                        r"'url':'(.*?)'", params_str)[0]
+                    params_referer = re.findall(
+                        r"'referer':'(.*?)'", params_str)[0]
+                    params_time = re.findall(
+                        r"'time':'(.*?)'", params_str)[0]
+                    other_l = base64.b64encode(
+                        params_url.encode(encoding='utf-8')).decode()
+                    data = {
+                        'url': params_url,
+                        'referer': params_referer,
+                        'time': params_time,
+                        'other_l': other_l
+                    }
+                    logger.info(f'Get -> {data}')
+                    logger.info(f'Request(method[POST]) {api_url}')
+                    res = requests.post(api_url, headers={
+                        'user-agent': choice_agent(),
+                    }, data=data)
+                    download_url = res.json()['url']
+    except BaseException as e:
+        download_url = ''
+        logger.warning(f'jx error {e}')
+    finally:
+        if download_url.startswith('//'):
+            download_url = 'https:' + download_url
+    return download_url
+
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO,
@@ -419,51 +494,32 @@ if __name__ == '__main__':
     #             f'E:\\YunBo\\龙珠超国语版.{episode_num}.ts',
     #             thread_num=10)
     #     time.sleep(.5)
-    # m3u8_url = 'https://www.mp4er.com/10E79044B82A84F70BE1308FFA5232E45E1BF4AD728091C9ED8951D43C5C7BE0240C4FF83F4998C573360D5AB221161D.m3u8'
-    # IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\7-27-2.ts',
-    #                     headers=headers, thread_num=1)
+    # m3u8_url = 'https://www.mp4er.com/F3DC3DBAE3D9C51191AFADC53565F819FB6400B3C55D68F9C887B441DE6A1B7D37A0274EBE1E15E970E93ECA366FE7A0033211E3AF74A40AE3F2F7256EAA39B316428952FC74B0F32228F6151EC1A9DDF324A3E77A4B049AAE15429C974C157E.m3u8'
+    m3u8_url = 'https://embed01.asianstream.tv/hls/1f2b8e8b42bd2cfbd0b985267a1fce9f/1f2b8e8b42bd2cfbd0b985267a1fce9f.m3u8'
+    IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\7-30.ts',
+                        headers=headers, thread_num=10)
     # pm = ParseM3u8()
     # pm.start(m3u8_url, f'E:\\YunBo\\6-25-2.ts')
 
-    '''
-    Stream #0:1 aac chi
-    Stream #0:2 ac3 eng
-    Stream #0:3 aac eng
-    '''
-    # 如何知道某一种语言只有ac3/aac?
-    audio_info_list = [
-        {'audio_index': '1', 'codec_name': 'ac3', 'language': 'chi'},
-        # {'audio_index': '2', 'codec_name': 'aac', 'language': 'eng'},
-        {'audio_index': '3', 'codec_name': 'ac3', 'language': 'eng'},
-        # {'audio_index': '4', 'codec_name': 'aac', 'language': 'chi'},
-    ]
-    language_state = {}
-    for info in audio_info_list:
-        if info['language'] not in language_state.keys():
-            language_state[info['language']] = {}
-        
-        if 'has_aac' not in language_state[info['language']].keys() or not language_state[info['language']]['has_aac'][0]:
-            language_state[info['language']]['has_aac'] = (True, info['audio_index']) if info['codec_name'].find('aac') >= 0 else (False, info['audio_index'])
-        
-        if 'has_ac3' not in language_state[info['language']].keys() or not language_state[info['language']]['has_ac3'][0]:
-            language_state[info['language']]['has_ac3'] = (True, info['audio_index']) if info['codec_name'].find('ac3') >= 0 else (False, info['audio_index'])
+    # import requests
 
-    trans_aac_list = []
-    get_ac3_list = []
-    for key, value in language_state.items():
-        print(value)
-        has_aac_tuple = value['has_aac']
-        has_ac3_tuple = value['has_ac3']
-        if has_aac_tuple[0] and has_ac3_tuple[0]:
-            both_have = True
-        else:
-            if not has_aac_tuple[0]:
-                only_has_ac3 = True
-                trans_aac_list.append(has_aac_tuple[1])
-                get_ac3_list.append(has_aac_tuple[1])
-            else:
-                only_has_aac = True
-                get_ac3_list.append(has_aac_tuple[1])
+    # headers = {
+    #     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36',
+    # }
 
-    print(f'需要转换成aac: {trans_aac_list}')
-    print(f'需要生成ac3:{get_ac3_list}')
+    # response = requests.get(
+    #     'https://list.youku.com/albumlist/items?id=23427474&page=2&size=20&ascending=1&callback=tuijsonp13', headers=headers)
+
+    # res_json = json.loads(re.findall(r'\(({.*?})\)', response.text)[0])
+    # html = res_json['html']
+    # # selector = Selector(text=html)
+    # # play_url_list = selector.xpath('//div[@id="playList"]/div//div/a/@href').getall()
+    # play_url_list = re.findall(r'<a href="(.*?)"', html)
+    # for i in range(len(play_url_list)):
+    #     if str(play_url_list[i]).startswith('//'):
+    #         play_url = 'https:' + play_url_list[i]
+    #     m3u8_url = __jx_api(play_url)
+    #     print(f'm3u8_url={m3u8_url}')
+    #     if m3u8_url:
+    #         IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\万里长情粤语版.{i + 21}.ts',
+    #                     headers=headers, thread_num=10)

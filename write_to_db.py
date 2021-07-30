@@ -256,9 +256,9 @@ if __name__ == '__main__':
     key_map['download_url']['episode_name'] = f"{key_map['name']}.mp4"
     # print(key_map)
 
-    # db_handle = db.hktv_video_info
+    db_handle = db.hktv_video_info
     # db_handle = db.bde4_video_info
-    db_handle = db.bilibili_video_info
+    # db_handle = db.bilibili_video_info
     # db_handle = db.media_asserts_info_iqiyi
 
     # for i in url_list:
@@ -276,10 +276,10 @@ if __name__ == '__main__':
     #     print(data)
     #     insert_to_db(db_handle, data)
 
-    name = '加油,李先生'
-    douban_id = '30168156'
-    # insert_tv_series(db_handle, name, douban_id, 6, episode_name=name)
-    insert_movie_data(db_handle, name, douban_id, episode_name=name)
+    name = '万里长情粤语版'
+    douban_id = '4149301'
+    insert_tv_series(db_handle, name, douban_id, 30, episode_name=name)
+    # insert_movie_data(db_handle, name, douban_id, episode_name=name)
     # insert_to_db(db_handle, key_map)
 
     from Crypto.Cipher import AES
