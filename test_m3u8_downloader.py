@@ -495,10 +495,10 @@ if __name__ == '__main__':
     #             thread_num=10)
     #     time.sleep(.5)
     # m3u8_url = 'https://www.mp4er.com/F3DC3DBAE3D9C51191AFADC53565F819FB6400B3C55D68F9C887B441DE6A1B7D37A0274EBE1E15E970E93ECA366FE7A0033211E3AF74A40AE3F2F7256EAA39B316428952FC74B0F32228F6151EC1A9DDF324A3E77A4B049AAE15429C974C157E.m3u8'
-    m3u8_url = 'https://embed01.asianstream.tv/hls/1f2b8e8b42bd2cfbd0b985267a1fce9f/1f2b8e8b42bd2cfbd0b985267a1fce9f.m3u8'
-    IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\7-30.ts',
-                        headers=headers, thread_num=10)
-    # pm = ParseM3u8()
+    # m3u8_url = 'https://vod8.wenshibaowenbei.com/20210730/XEAc62ZA//1000kb/hls/index.m3u8'
+    # IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\密室大逃脱大神版第三季.20210729.ts',
+    #                     headers=headers, thread_num=5)
+    # # pm = ParseM3u8()
     # pm.start(m3u8_url, f'E:\\YunBo\\6-25-2.ts')
 
     # import requests
@@ -508,7 +508,7 @@ if __name__ == '__main__':
     # }
 
     # response = requests.get(
-    #     'https://list.youku.com/albumlist/items?id=23427474&page=2&size=20&ascending=1&callback=tuijsonp13', headers=headers)
+    #     'https://list.youku.com/albumlist/items?id=6003728&page=1&size=20&ascending=1&callback=tuijsonp5', headers=headers)
 
     # res_json = json.loads(re.findall(r'\(({.*?})\)', response.text)[0])
     # html = res_json['html']
@@ -521,5 +521,35 @@ if __name__ == '__main__':
     #     m3u8_url = __jx_api(play_url)
     #     print(f'm3u8_url={m3u8_url}')
     #     if m3u8_url:
-    #         IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\万里长情粤语版.{i + 21}.ts',
+    #         IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\戏说台湾.{i + 1}.ts',
     #                     headers=headers, thread_num=10)
+
+    # url = 'https://classic.uvod.tv/play/107159/438142'
+    # headers = {
+    #     # 'authority': 'classic.uvod.tv',
+    #     'cache-control': 'max-age=0',
+    #     'sec-ch-ua': '"Chromium";v="92", " Not A;Brand";v="99", "Google Chrome";v="92"',
+    #     'sec-ch-ua-mobile': '?0',
+    #     'upgrade-insecure-requests': '1',
+    #     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36',
+    #     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    #     'sec-fetch-site': 'same-origin',
+    #     'sec-fetch-mode': 'navigate',
+    #     'sec-fetch-user': '?1',
+    #     'sec-fetch-dest': 'document',
+    #     # 'referer': 'https://classic.uvod.tv/play/107159/438142',
+    #     'accept-language': 'zh-CN,zh;q=0.9',
+    #     # 'cookie': 'csrf_cookie_name=c78f2c161b3e4471cb5507e4f094419c; PHPSESSID=7ispa3ren8n26nq1oe5jp1c8c5; _gid=GA1.2.831827850.1627873884; _ga_ZF19Z6TK4Z=GS1.1.1627873762.2.1.1627875116.60; _ga=GA1.2.2105216730.1627613523',
+    # }
+    # res_text = requests.get('https://github.com/', headers=headers)
+    # print(res_text.status_code)
+
+    import requests
+
+    headers = {
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36',
+        # 'cookie': 'PHPSESSID=tml1sfqf1ufi8ja10g51obu355; _ga_ZF19Z6TK4Z=GS1.1.1628158510.3.0.1628158510.60; _ga=GA1.2.2105216730.1627613523; _gid=GA1.2.998539374.1628158512',
+    }
+
+    response = requests.get('https://classic.uvod.tv/play/107159/428489', headers=headers)
+    print(response.text)

@@ -14,7 +14,7 @@ db_handle = db.bde4_video_info
 
 info = db_handle.find({'name': '若你安好便是晴天'})
 
-target_dir = 'E:\补集\瑞克和莫蒂第五季'
+target_dir = 'E:\BaiduNetiskDownload\新兵日记'
 
 file_list = []
 for root, dirs, files in os.walk(target_dir, topdown=False):
@@ -40,7 +40,7 @@ for root, dirs, files in os.walk(target_dir, topdown=False):
         #     item[movie['seq_num']] = movie['download_url']['episode_name']
         # print(item[seq_num])
 
-        new_name = f'瑞克和莫蒂第五季.{seq_num}.{tail_type}'
+        new_name = f'新兵日记.{seq_num}.{tail_type}'
         new_path = Path(root) / Path(new_name)
         # print(new_path)
         # movie_name = new_name

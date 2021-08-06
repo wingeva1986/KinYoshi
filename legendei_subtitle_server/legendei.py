@@ -1,8 +1,9 @@
 # coding=utf-8
-import logging
-import math
 import re
 import sys
+import difflib
+import logging
+import math
 import requests
 from lxml import etree
 
@@ -36,6 +37,11 @@ class Legendei(object):
     def __init__(self):
         self.headers = {'user-agent': choice_agent()}
 
+    @staticmethod
+    def get_equal_rate(str1, str2):
+        ''' 两个字符串的相似度 '''
+        return difflib.SequenceMatcher(None, str1, str2).quick_ratio()
+
     def format_name(self, name: str):
         name_list = []
         try:
@@ -53,7 +59,7 @@ class Legendei(object):
             seasons = SEASON_PU_PATTERN.search(video_name).group(1)
             video_name = f'{series_name} S0{seasons}' if int(seasons) < 10 else f'{series_name} S{seasons}'
         if video_name.find('/') >= 0:
-            name_list += [vname.strip() for vname in video_name.split('/')]
+            name_list += [name.strip() for name in video_name.split('/')]
         else:
             name_list += [video_name]
         return name_list
@@ -62,9 +68,9 @@ class Legendei(object):
         # https://legendei.to/category/filmes/page/1/?s=The%20Outpost
         # https://legendei.to/category/series/page/1/?s=The+Outpost
         video_type = kwargs.get('video_type', '')
-        if video_type.find('电影'):
+        if video_type.find('电影') >= 0:
             base_url = 'https://legendei.to/category/filmes/page/1/'
-        elif video_type.find('电视剧'):
+        elif video_type.find('电视剧') >= 0:
             base_url = 'https://legendei.to/category/series/page/1/'
         else:
             base_url = 'https://legendei.to/page/1/'
@@ -75,7 +81,6 @@ class Legendei(object):
         response = requests.get(url, headers=self.headers)
         res_data = etree.HTML(response.text)
         data_list.append(res_data)
-
         last_urls = res_data.xpath('//span[@class="pages"]/text()')
         if last_urls:
             try:
@@ -100,13 +105,14 @@ class Legendei(object):
                 full_name = result.xpath('a/text()')[0]
                 logger.info(f'name:{full_name}, detail_url={detail_url}')
                 video_name_list = self.format_name(full_name)
-                logger.info(f'{full_name}, {video_name_list}')
+                logger.info(f'\nfull name: {full_name}\nformat name: {video_name_list}')
 
                 if re.compile(r'(E\d+\-E\d+)').search(full_name):
                     episode_num_list = re.findall(r'E(\d+)', full_name)
                 else:
                     episode_num_match = re.compile(r'E(\d+)').search(full_name)
                     episode_num_list = [episode_num_match.group(1)] if episode_num_match else []
+                
                 detail_str = requests.get(detail_url, headers=self.headers).text
                 detail_data = etree.HTML(detail_str)
                 sub_url_list = detail_data.xpath('//a[@class="buttondown"]/@href')
@@ -117,20 +123,21 @@ class Legendei(object):
                 # logger.info(detail_con)
                 handle_name = '.'.join(keyword.replace(':', '').split(' '))
 
-                name_ret = keyword.upper() in [vname.upper() for vname in video_name_list]
-                name_in_detail_ret = detail_con.find(handle_name) >= 0 or detail_con.find(keyword) >= 0
-                logger.info(f'handle_keyword={handle_name}, name_ret={name_ret}, name_in_detail_ret={name_in_detail_ret}')
-                if name_ret or name_in_detail_ret:
-                    if sub_url_list:
-                        subtitle_url = sub_url_list[0]
-                        if not str(subtitle_url).startswith('http'):
-                            subtitle_url = f'{detail_url}{subtitle_url}'
-                        episode_list.append({
-                            'name': video_name_list[0],
-                            'multi_name': video_name_list,
-                            'seq_num': '-'.join(episode_num_list) if episode_num_list else '',
-                            'subtitle_url': subtitle_url
-                        })
+                name_ret = keyword.upper() in [name.upper() for name in video_name_list]
+                # 拿处理好后的所有名字和keyword比较获取相似度
+                name_rate = [self.get_equal_rate(keyword, name) for name in video_name_list]
+                # name_in_detail_ret = detail_con.find(handle_name) >= 0 or detail_con.find(keyword) >= 0
+                logger.info(f'\nhandle_keyword = {handle_name}\nname_rate = {name_rate}\nname_ret = {name_ret}')
+                if name_ret and sub_url_list:
+                    subtitle_url = sub_url_list[0]
+                    if not str(subtitle_url).startswith('http'):
+                        subtitle_url = f'{detail_url}{subtitle_url}'
+                    episode_list.append({
+                        'name': video_name_list[0],
+                        'multi_name': video_name_list,
+                        'seq_num': '-'.join(episode_num_list) if episode_num_list else '',
+                        'subtitle_url': subtitle_url
+                    })
         return episode_list
 
 
@@ -139,7 +146,7 @@ if __name__ == '__main__':
                         format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
     legendei = Legendei()
-    keyword = 'Ten Minutes to Midnight'
+    keyword = 'American Skin'
 
     for i in legendei.subtitle_search(keyword):
         logger.info(i)
