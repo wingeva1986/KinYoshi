@@ -1,4 +1,6 @@
 # coding=utf-8
+import time
+from datetime import time
 import re
 import sys
 import difflib
@@ -93,6 +95,7 @@ class Legendei(object):
                     page_res_str = requests.get(page_url, headers=self.headers).text
                     page_data = etree.HTML(page_res_str)
                     data_list.append(page_data)
+                    time.sleep(.5)
             except BaseException as e:
                 logger.warning(f'get detail content error, {e}')
 
@@ -118,23 +121,29 @@ class Legendei(object):
                 sub_url_list = detail_data.xpath('//a[@class="buttondown"]/@href')
                 if not sub_url_list:
                     sub_url_list = detail_data.xpath('//a[@class="rcw-button-0 rcw-medium orange "]/@href')
-                detail_con_list = detail_data.xpath('//div[@class="entry-content clearfix"]/p/text()')
-                detail_con = ''.join(detail_con_list)
+                # detail_con_list = detail_data.xpath('//div[@class="entry-content clearfix"]/p/text()')
+                # detail_con = ''.join(detail_con_list)
                 # logger.info(detail_con)
-                handle_name = '.'.join(keyword.replace(':', '').split(' '))
+                # handle_name = '.'.join(keyword.replace(':', '').split(' '))
 
                 name_ret = keyword.upper() in [name.upper() for name in video_name_list]
                 # 拿处理好后的所有名字和keyword比较获取相似度
-                name_rate = [self.get_equal_rate(keyword, name) for name in video_name_list]
+                mutil_name = {"full_name": full_name, "info": []}
+                for name in video_name_list:
+                    mutil_name["info"].append({
+                        "name": name,
+                        "name_rate": self.get_equal_rate(keyword, name)
+                    })
+                # name_rates = [{'full_name': full_name,'format_name': name, 'name_rate': self.get_equal_rate(keyword, name)} for name in video_name_list]
                 # name_in_detail_ret = detail_con.find(handle_name) >= 0 or detail_con.find(keyword) >= 0
-                logger.info(f'\nhandle_keyword = {handle_name}\nname_rate = {name_rate}\nname_ret = {name_ret}')
+                logger.info(f'\nmutil_name = {mutil_name}\nname_ret = {name_ret}')
                 if name_ret and sub_url_list:
                     subtitle_url = sub_url_list[0]
                     if not str(subtitle_url).startswith('http'):
                         subtitle_url = f'{detail_url}{subtitle_url}'
                     episode_list.append({
-                        'name': video_name_list[0],
-                        'multi_name': video_name_list,
+                        'keyword': keyword,
+                        'names': mutil_name,
                         'seq_num': '-'.join(episode_num_list) if episode_num_list else '',
                         'subtitle_url': subtitle_url
                     })
@@ -146,7 +155,7 @@ if __name__ == '__main__':
                         format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
     legendei = Legendei()
-    keyword = 'American Skin'
+    keyword = 'The Pond'
 
     for i in legendei.subtitle_search(keyword):
         logger.info(i)
