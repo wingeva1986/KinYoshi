@@ -67,6 +67,14 @@ class Legendei(object):
         return name_list
 
     def subtitle_search(self, keyword: str, **kwargs):
+        '''
+        return {
+            "keyword": keyword,
+            "search_res": [
+                {"full_name": full_name, "name_rate": name_rate, "detail_url": detail_url, "subtitle_url": subtilte_url}
+            ]
+        }
+        '''
         # https://legendei.to/category/filmes/page/1/?s=The%20Outpost
         # https://legendei.to/category/series/page/1/?s=The+Outpost
         video_type = kwargs.get('video_type', '')
@@ -99,7 +107,7 @@ class Legendei(object):
             except BaseException as e:
                 logger.warning(f'get detail content error, {e}')
 
-        episode_list = []
+        res_item = {"keyword": keyword, "search_res": []}
         for data in data_list:
             result_list = data.xpath('//div[@class="simple-grid-posts simple-grid-posts-grid"]/div/div/div/div/h3')
 
@@ -110,44 +118,47 @@ class Legendei(object):
                 video_name_list = self.format_name(full_name)
                 logger.info(f'\nfull name: {full_name}\nformat name: {video_name_list}')
 
+                # 多剧集获取seq_nums
                 if re.compile(r'(E\d+\-E\d+)').search(full_name):
                     episode_num_list = re.findall(r'E(\d+)', full_name)
                 else:
                     episode_num_match = re.compile(r'E(\d+)').search(full_name)
                     episode_num_list = [episode_num_match.group(1)] if episode_num_match else []
                 
-                detail_str = requests.get(detail_url, headers=self.headers).text
-                detail_data = etree.HTML(detail_str)
-                sub_url_list = detail_data.xpath('//a[@class="buttondown"]/@href')
-                if not sub_url_list:
-                    sub_url_list = detail_data.xpath('//a[@class="rcw-button-0 rcw-medium orange "]/@href')
                 # detail_con_list = detail_data.xpath('//div[@class="entry-content clearfix"]/p/text()')
                 # detail_con = ''.join(detail_con_list)
                 # logger.info(detail_con)
                 # handle_name = '.'.join(keyword.replace(':', '').split(' '))
+                # name_ret = keyword.upper() in [name.upper() for name in video_name_list]
 
-                name_ret = keyword.upper() in [name.upper() for name in video_name_list]
                 # 拿处理好后的所有名字和keyword比较获取相似度
-                mutil_name = {"full_name": full_name, "info": []}
-                for name in video_name_list:
-                    mutil_name["info"].append({
-                        "name": name,
-                        "name_rate": self.get_equal_rate(keyword, name)
-                    })
-                # name_rates = [{'full_name': full_name,'format_name': name, 'name_rate': self.get_equal_rate(keyword, name)} for name in video_name_list]
-                # name_in_detail_ret = detail_con.find(handle_name) >= 0 or detail_con.find(keyword) >= 0
-                logger.info(f'\nmutil_name = {mutil_name}\nname_ret = {name_ret}')
-                if name_ret and sub_url_list:
-                    subtitle_url = sub_url_list[0]
-                    if not str(subtitle_url).startswith('http'):
-                        subtitle_url = f'{detail_url}{subtitle_url}'
-                    episode_list.append({
-                        'keyword': keyword,
-                        'names': mutil_name,
-                        'seq_num': '-'.join(episode_num_list) if episode_num_list else '',
-                        'subtitle_url': subtitle_url
-                    })
-        return episode_list
+                mutil_name = {"full_name": full_name, "info": [{
+                    "name": name,
+                    "name_rate": self.get_equal_rate(keyword, name)
+                } for name in video_name_list]}
+                if [i for i in mutil_name["info"] if i["name_rate"] > 0.9]:
+                    mutil_name['detail_url'] = detail_url
+                    mutil_name['subtitle_url'] = self.get_subtitle_url(detail_url)
+                    # mutil_name['seq_num'] = '-'.join(episode_num_list) if episode_num_list else ''
+                    res_item["search_res"].append(mutil_name)
+                logger.info(f'mutil_name = {mutil_name}')
+        return res_item
+
+
+    def get_subtitle_url(self, detail_url: str, **kwargs):
+        subtitle_url = ''
+        detail_str = requests.get(detail_url, headers=self.headers).text
+        detail_data = etree.HTML(detail_str)
+        sub_url_list = detail_data.xpath('//a[@class="buttondown"]/@href')
+        if not sub_url_list:
+            sub_url_list = detail_data.xpath('//a[@class="rcw-button-0 rcw-medium orange "]/@href')
+            if not sub_url_list:
+                sub_url_list = detail_data.xpath('//a[@class="rcw-button-0 rcw-large orange "]/@href')
+        if sub_url_list:
+            subtitle_url = sub_url_list[0]
+            if not subtitle_url.startswith("http"):
+                subtitle_url = detail_url + subtitle_url
+        return subtitle_url
 
 
 if __name__ == '__main__':
@@ -157,5 +168,8 @@ if __name__ == '__main__':
     legendei = Legendei()
     keyword = 'The Pond'
 
-    for i in legendei.subtitle_search(keyword):
+    res = legendei.subtitle_search(keyword)
+    logger.info(res['keyword'])
+    for i in res["search_res"]:
         logger.info(i)
+    # logger.info(res['subtitle_urls'])
