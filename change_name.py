@@ -22,7 +22,7 @@ for root, dirs, files in os.walk(target_dir, topdown=False):
         file_path = Path(root) / Path(files[i])
         tail_type = files[i].split('.')[-1]
         # print(file_path)
-        seq_num = re.findall(r'E(\d+)\.', files[i])
+        seq_num = re.findall(r'(\d+)\.', files[i])
         try:
             if int(seq_num[-1]) < 10:
                 seq_num = str(seq_num[-1]).replace('0', '', 1)
@@ -40,7 +40,7 @@ for root, dirs, files in os.walk(target_dir, topdown=False):
         #     item[movie['seq_num']] = movie['download_url']['episode_name']
         # print(item[seq_num])
 
-        new_name = f'新兵日记.{seq_num}.{tail_type}'
+        new_name = f'再次十八岁粤语版.{seq_num}.{tail_type}'
         new_path = Path(root) / Path(new_name)
         # print(new_path)
         # movie_name = new_name

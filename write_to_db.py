@@ -276,11 +276,11 @@ if __name__ == '__main__':
     #     print(data)
     #     insert_to_db(db_handle, data)
 
-    name = '法老与众神'
-    douban_id = '10793610'
-    # insert_tv_series(db_handle, name, douban_id, 73, episode_name=name)
+    name = '海岸大捕怪'
+    douban_id = '4079120'
+    # insert_tv_series(db_handle, name, douban_id, 24, episode_name=name)
     insert_movie_data(db_handle, name, douban_id, episode_name=name)
-    # insert_to_db(db_handle, key_map)
+    # insert_to_db(db_handle, key_m1296215ap)
 
     from Crypto.Cipher import AES
     import numpy as np
