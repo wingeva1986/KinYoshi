@@ -1,3 +1,4 @@
+import re
 import m3u8
 import time
 import base64
@@ -79,6 +80,27 @@ def get_header_list(headers: dict) -> list:
         header_list.append(header_str)
     return header_list
 
+def number_to_str(num: str):
+    num_dict = {'1': '一', '2': '二', '3': '三', '4': '四', '5': '五', '6': '六', '7': '七', '8': '八', '9': '九', '0': '零', }
+    index_dict = {1: '', 2: '十', 3: '百', 4: '千', 5: '万', 6: '十', 7: '百', 8: '千', 9: '亿'}
+    while True:
+        nums = list(num)
+        nums_index = [x for x in range(1, len(nums) + 1)][-1::-1]
+
+        str = ''
+        for index, item in enumerate(nums):
+            str = "".join((str, num_dict[item], index_dict[nums_index[index]]))
+        if num == '1':
+            return num_dict[num]
+        else:
+            if nums[0] == '1' and len(nums) < 3:
+                str = re.sub("一", "", str, 1)
+        str = re.sub("零[十百千零]*", "零", str)
+        str = re.sub("零万", "万", str)
+        str = re.sub("亿万", "亿零", str)
+        str = re.sub("零零", "零", str)
+        str = re.sub("零\\b", "", str)
+        return str
 
 def trans_to_alb(chn):
     '''

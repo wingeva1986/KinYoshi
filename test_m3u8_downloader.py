@@ -427,6 +427,81 @@ def __jx_api(url_param: str):
     return download_url
 
 
+def youku_download():
+    headers = {
+        'user-agent': choice_agent(),
+    }
+    response = requests.get('https://list.youku.com/show/episode?id=327137&stage=reload_201805&callback=jQuery111206441220547532585_1629080171297&_=1629080171307', headers=headers)
+    res_json = json.loads(re.findall(r'\(({.*?})\)', response.text)[0])
+    html = res_json['html']
+    # selector = Selector(text=html)
+    # play_url_list = selector.xpath('//div[@id="playList"]/div//div/a/@href').getall()
+    play_url_list = re.findall(r'<dt>(.*?)<a class="c555" href="(.*?)"', html)
+    for i in range(len(play_url_list)):
+        if str(play_url_list[i][1]).startswith('//'):
+            play_url = 'https:' + play_url_list[i][1]
+        m3u8_url = __jx_api(play_url)
+        print(f'm3u8_url={m3u8_url}')
+        if m3u8_url:
+            IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\中国梦想秀第十季.{play_url_list[i][0]}.ts',
+                        headers=headers, thread_num=10)
+
+
+def ktkkt_download():
+    api_url = 'http://127.0.0.1:9700/parse/ktkkt'
+    base_url = 'https://www.ktkkt.top'
+    list_url = 'https://www.ktkkt.top/movie/index4992.html'
+    res_str = requests.get(list_url, headers=headers, proxies=get_proxy()).text
+    selector = Selector(text=res_str)
+    episode_list = selector.xpath('//div[@id="playlist1"]/ul/li')
+    for episode in episode_list[125:130]:
+        episode_name = episode.xpath('a/text()').get()
+        play_url = episode.xpath('a/@href').get()
+        print(f'episode_name={episode_name}, play_url={base_url + play_url}')
+        if play_url and episode_name:
+            play_url = base_url + play_url
+            episode_num = re.findall(r'(\d+)',  episode_name)[0]
+
+            data = {
+                'url': play_url
+            }
+            response = requests.post(api_url, data=data)
+            res_json = response.json()
+            print(res_json)
+            IQIYIM3u8Downloader().download(
+                res_json['result'][0]['urls'],
+                f'E:\\YunBo\\龙珠超国语版.{episode_num}.ts',
+                thread_num=10)
+        time.sleep(.5)
+
+
+def hktv_download():
+    base_url = 'https://www.hktv03.com/'
+    detail_url = 'https://www.hktv03.com/vod/detail/id/138479.html'
+    res_str = requests.get(detail_url, headers=headers).text
+    selector = Selector(text=res_str)
+    info_list = selector.xpath('(//div[@class="myui-panel_bd clearfix"])[2]/ul/li')
+    for i in info_list:
+        episode_name = i.xpath('a/text()').get()
+        play_url = base_url + i.xpath('a/@href').get()
+        try:
+            seq_num = re.findall(r'(\d+)集', episode_name)[0]
+        except:
+            seq_num = ''
+        if seq_num and play_url:
+            print(f'{episode_name}, {play_url}')
+            api_url = 'http://127.0.0.1:9700/parse/hktv'
+            data = {
+                'url': play_url
+            }
+            response = requests.post(api_url, data=data)
+            video_src = response.json()['result']['video_src']
+            m3u8_url = video_src[0]['url']
+            if m3u8_url:
+                IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\僵尸道长2国语版.{seq_num}.ts',
+                        headers=headers, thread_num=10)
+
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s - %(message)s',
@@ -437,119 +512,45 @@ if __name__ == '__main__':
     # db = client.tp_media_assert_db
     # db_handle = db.dandanzan_movie_info
     headers = {
-        # 'Connection': 'keep-alive',
-        # 'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
-        # 'sec-ch-ua-mobile': '?0',
-        'User-Agent': choice_agent(),
-        # 'Accept': '*/*',
-        # 'Sec-Fetch-Site': 'cross-site',
-        # 'Sec-Fetch-Mode': 'cors',
-        # 'Sec-Fetch-Dest': 'empty',
-        # 'Accept-Language': 'zh-CN,zh;q=0.9',
+        'sec-ch-ua': '"Chromium";v="92", " Not A;Brand";v="99", "Google Chrome";v="92"',
+        'Referer': '',
+        'sec-ch-ua-mobile': '?0',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36',
     }
-
-    # downloader = StandM3u8Downloader()
-    # downloader = IQIYIM3u8Downloader()
-
-    # download_list = []
-    # info_list = db_handle.find({"name": "终极一班5", "seq_num": {"$gte": "55"}})
-    # for info in info_list:
-    #     download_list.append({"url": info["download_url"]["url"], "episode_name": info["download_url"]["episode_name"]})
-
-    # for i in download_list:
-    #     header_list = ['user-agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36']
-    # video_src = parser.parse(i['url'])['video_src']
-    # for j in video_src:
-    #     m3u8_url = j['url']
-    #     print(i["episode_name"], m3u8_url)
-    #     # downloader.download(m3u8_url, f'E:\\YunBo\\{i["episode_name"]}', headers=j['headers'], thread_num=10)
-    #     break
     '''
     飞哥与小佛  https://www.70cn.com/tag/%E9%A3%9E%E5%93%A5%E4%B8%8E%E5%B0%8F%E4%BD%9B#
     地狱厨房    https://www.70cn.com/tag/%E5%9C%B0%E7%8B%B1%E5%8E%A8%E6%88%BF
     '''
-    # api_url = 'http://127.0.0.1:9700/parse/ktkkt'
-
-    # base_url = 'https://www.ktkkt.top'
-    # list_url = 'https://www.ktkkt.top/movie/index4992.html'
-    # res_str = requests.get(list_url, headers=headers, proxies=get_proxy()).text
-    # selector = Selector(text=res_str)
-    # episode_list = selector.xpath('//div[@id="playlist1"]/ul/li')
-    # for episode in episode_list[125:130]:
-    #     episode_name = episode.xpath('a/text()').get()
-    #     play_url = episode.xpath('a/@href').get()
-    #     print(f'episode_name={episode_name}, play_url={base_url + play_url}')
-    #     if play_url and episode_name:
-    #         play_url = base_url + play_url
-    #         episode_num = re.findall(r'(\d+)',  episode_name)[0]
-            
-    #         data = {
-    #             'url': play_url
-    #         }
-    #         response = requests.post(api_url, data=data)
-    #         res_json = response.json()
-    #         print(res_json)
-    #         IQIYIM3u8Downloader().download(
-    #             res_json['result'][0]['urls'], 
-    #             f'E:\\YunBo\\龙珠超国语版.{episode_num}.ts',
-    #             thread_num=10)
-    #     time.sleep(.5)
+    
     # m3u8_url = 'https://www.mp4er.com/F3DC3DBAE3D9C51191AFADC53565F819FB6400B3C55D68F9C887B441DE6A1B7D37A0274EBE1E15E970E93ECA366FE7A0033211E3AF74A40AE3F2F7256EAA39B316428952FC74B0F32228F6151EC1A9DDF324A3E77A4B049AAE15429C974C157E.m3u8'
-    # m3u8_url = 'https://vod8.wenshibaowenbei.com/20210730/XEAc62ZA//1000kb/hls/index.m3u8'
-    # IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\密室大逃脱大神版第三季.20210729.ts',
-    #                     headers=headers, thread_num=5)
-    # # pm = ParseM3u8()
-    # pm.start(m3u8_url, f'E:\\YunBo\\6-25-2.ts')
-
-    # import requests
-
-    # headers = {
-    #     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36',
-    # }
-
-    # response = requests.get(
-    #     'https://list.youku.com/albumlist/items?id=6003728&page=1&size=20&ascending=1&callback=tuijsonp5', headers=headers)
-
-    # res_json = json.loads(re.findall(r'\(({.*?})\)', response.text)[0])
-    # html = res_json['html']
-    # # selector = Selector(text=html)
-    # # play_url_list = selector.xpath('//div[@id="playList"]/div//div/a/@href').getall()
-    # play_url_list = re.findall(r'<a href="(.*?)"', html)
-    # for i in range(len(play_url_list)):
-    #     if str(play_url_list[i]).startswith('//'):
-    #         play_url = 'https:' + play_url_list[i]
-    #     m3u8_url = __jx_api(play_url)
-    #     print(f'm3u8_url={m3u8_url}')
-    #     if m3u8_url:
-    #         IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\戏说台湾.{i + 1}.ts',
+    # m3u8_url = 'https://vod6.wenshibaowenbei.com/20210823/sfldYq0F/1000kb/hls/index.m3u8'
+    # IQIYIM3u8Downloader().download(m3u8_url, f'E:\\YunBo\\俗女养成记2.3.ts',
     #                     headers=headers, thread_num=10)
-
-    # url = 'https://classic.uvod.tv/play/107159/438142'
-    # headers = {
-    #     # 'authority': 'classic.uvod.tv',
-    #     'cache-control': 'max-age=0',
-    #     'sec-ch-ua': '"Chromium";v="92", " Not A;Brand";v="99", "Google Chrome";v="92"',
-    #     'sec-ch-ua-mobile': '?0',
-    #     'upgrade-insecure-requests': '1',
-    #     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36',
-    #     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    #     'sec-fetch-site': 'same-origin',
-    #     'sec-fetch-mode': 'navigate',
-    #     'sec-fetch-user': '?1',
-    #     'sec-fetch-dest': 'document',
-    #     # 'referer': 'https://classic.uvod.tv/play/107159/438142',
-    #     'accept-language': 'zh-CN,zh;q=0.9',
-    #     # 'cookie': 'csrf_cookie_name=c78f2c161b3e4471cb5507e4f094419c; PHPSESSID=7ispa3ren8n26nq1oe5jp1c8c5; _gid=GA1.2.831827850.1627873884; _ga_ZF19Z6TK4Z=GS1.1.1627873762.2.1.1627875116.60; _ga=GA1.2.2105216730.1627613523',
-    # }
-    # res_text = requests.get('https://github.com/', headers=headers)
-    # print(res_text.status_code)
+    """
+    特殊案件专案组TEN第一部
+    来自星星的你（）
+    不朽的名曲2（2021）
+    甜蜜家园 Sweet Home
+    """
+    REMOVE_PATTERN = re.compile('|'.join([
+        r'（.*?）',
+        r'\(.*?\)',
+    ]))
+    repalce_pattern = re.compile(r'(第\w+)部')
+    name = '来自星星的你（）'
+    # print(REMOVE_PATTERN.sub('', name))
+    # print(repalce_pattern.sub(repalce_pattern.search(name).group(1) + '季', name))
 
     import requests
 
     headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36',
-        # 'cookie': 'PHPSESSID=tml1sfqf1ufi8ja10g51obu355; _ga_ZF19Z6TK4Z=GS1.1.1628158510.3.0.1628158510.60; _ga=GA1.2.2105216730.1627613523; _gid=GA1.2.998539374.1628158512',
+        'host': 'jxn2.178du.com',
+        
+        'scheme': 'https',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36',
+        'referer': 'https://jxn2.178du.com/hls/18459ff8a6485c6d69f87e527091404e7c2f27e32ea4cf0d80128a961fb804baaeb8d237eb311ef2e031354979ba51f14811bf43cd8fecc9d3926d',
     }
-
-    response = requests.get('https://classic.uvod.tv/play/107159/428489', headers=headers)
+    url = 'https://jxn2.178du.com/hls/play/1f03e80fb250aeab0badcc21956d1d5f6a5263b4be08d8ff50d3856b2c3bc7e48f0eed1819fe940cf48b341f2e2c7a19dae4fa764ddf45f71b475db5708d52e131a44903373d42daef3ef574ed391f88e091'
+    response = requests.post(url, headers=headers, proxies=get_proxy())
     print(response.text)
+    print(response.status_code)

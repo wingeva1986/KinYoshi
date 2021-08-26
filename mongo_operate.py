@@ -93,10 +93,13 @@ if __name__ == '__main__':
     for index, row in df.iterrows():
         episodes_str = row['缺集']
         status = row['状态']
+        if status == '补齐' or status == '已有完整版' or status == '没有资源':
+            continue
         data = {
             'name': row['专辑名称'],
             'seasons': str(int(row['季'])) if row['季'] else '',
-            'year': str(int(row['年代'])) if row['年代'] else ''
+            'year': str(int(row['年代'])) if row['年代'] else '',
+            'download_state.status': '4'
         }
         episode_list = episodes_str.split(',')
         episode_list = [i for i in episode_list if i]
@@ -110,5 +113,5 @@ if __name__ == '__main__':
         elif row['内容提供方'] == 'www.bilibili.com':
             col = tp_media_assert_db.bilibili_video_info
 
-        # unset_state(col, filter=data, seq_list=episode_list)
-        # add_sort(col, filter=data, seq_list=episode_list)
+        unset_state(col, filter=data, seq_list=episode_list)
+        add_sort(col, filter=data, seq_list=episode_list)
