@@ -101,9 +101,9 @@ class IQIYIM3u8Download(object):
         self._get_keys(set(keys))
         failures = self._threads_download(
             list(zip(range(1, len(urls) + 1), urls)), new_filepath, keys, chunk_size)
-        # for i in range(5):
-        #     if failures:
-        #         failures = self._threads_download(failures, new_filepath, keys, chunk_size)
+        for i in range(5):
+            if failures:
+                failures = self._threads_download(failures, new_filepath, keys, chunk_size)
         if not failures:
             self._merge_files(dirname_tmp, filepath, wipe_cache)
         return not bool(failures), failures
