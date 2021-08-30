@@ -282,8 +282,8 @@ if __name__ == "__main__":
                         format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
 
-    url = f'https://www.bilibili.com/video/BV1jE411L7ri?p=111'
-    output = f'E:\\YunBo\\You Quiz On The Block 3.20210630.mp4'
+    url = f'https://www.bilibili.com/bangumi/play/ep412068'
+    output = f'E:\\YunBo\\开挂药师的奇幻世界悠闲生活.s1e8.162991439580179660.mp4'
 
     res = BiLiBiLi(url).parse()
     data = json.dumps(res)

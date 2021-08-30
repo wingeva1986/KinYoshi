@@ -1,0 +1,39 @@
+[2021-08-29 15:10:45,576 test_m3u8_downloader.py][line:524] [27016-MainThread-30896:] INFO     download url https://vod10.bdzybf.com/20210824/BF1Lx15b/index.m3u8
+[2021-08-29 15:10:45,632 test_m3u8_downloader.py][line:530] [27016-MainThread-30896:] INFO     headers -> {'sec-ch-ua': '"Chromium";v="92", " Not A;Brand";v="99", "Google Chrome";v="92"', 'Referer': '', 'sec-ch-ua-mobile': '?0', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'}
+[2021-08-29 15:10:45,633 test_m3u8_downloader.py][line:532] [27016-MainThread-30896:] INFO     download E:\YunBo\826.ts output_dir=E:\YunBo
+[2021-08-29 15:10:48,101 test_m3u8_downloader.py][line:517] [27016-MainThread-30896:] INFO     has other m3u8, need request again
+[2021-08-29 15:10:48,102 test_m3u8_downloader.py][line:521] [27016-MainThread-30896:] INFO     other m3u8 -> https://vod10.bdzybf.com/20210824/BF1Lx15b/1000kb/hls/index.m3u8
+[2021-08-29 15:10:50,337 bde4_downloader.py][line:45] [27016-MainThread-30896:] INFO     创建文件夹: \home\www\tmp\m3u8\YunBo\826.ts文件夹
+[2021-08-29 15:10:50,338 m3u8_downloader.py][line:114] [27016-MainThread-30896:] INFO     下载keys: {'https://vod10.bdzybf.com/20210824/BF1Lx15b/1000kb/hls/key.key'}
+[2021-08-29 15:10:53,103 bde4_downloader.py][line:32] [27016-MainThread-30896:] ERROR    下载失败: Data must be padded to 16 byte boundary in CBC mode
+Traceback (most recent call last):
+  File "D:\Git_proj\KinYoshi\bde4_downloader.py", line 30, in bde4_download
+    return imd.download(urls, filepath, keys=keys, chunk_size=chunk_size, wipe_cache=wipe_cache)
+  File "D:\Git_proj\KinYoshi\bde4_downloader.py", line 48, in control
+    list(zip(range(1, len(urls) + 1), urls)), new_filepath, keys, chunk_size)
+  File "D:\Git_proj\KinYoshi\bde4_downloader.py", line 64, in _threads_download
+    for result in results:
+  File "D:\Python36\lib\concurrent\futures\_base.py", line 586, in result_iterator
+    yield fs.pop().result()
+  File "D:\Python36\lib\concurrent\futures\_base.py", line 432, in result
+    return self.__get_result()
+  File "D:\Python36\lib\concurrent\futures\_base.py", line 384, in __get_result
+    raise self._exception
+  File "D:\Python36\lib\concurrent\futures\thread.py", line 56, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\Git_proj\KinYoshi\bde4_downloader.py", line 87, in downloader
+    raise e
+  File "D:\Git_proj\KinYoshi\bde4_downloader.py", line 79, in downloader
+    self.__download(url, failure_path, key, chunk_size, sleep_time)
+  File "D:\Python36\lib\site-packages\func_timeout\dafunc.py", line 185, in <lambda>
+    return wraps(func)(lambda *args, **kwargs : func_timeout(defaultTimeout, func, args=args, kwargs=kwargs))
+  File "D:\Python36\lib\site-packages\func_timeout\dafunc.py", line 108, in func_timeout
+    raise_exception(exception)
+  File "D:\Python36\lib\site-packages\func_timeout\py3_raise.py", line 7, in raise_exception
+    raise exception[0] from None
+  File "D:\Git_proj\KinYoshi\bde4_downloader.py", line 107, in __download
+    resp_bytes = self.keys[key].decrypt(resp_bytes)
+  File "D:\Python36\lib\site-packages\Crypto\Cipher\_mode_cbc.py", line 246, in decrypt
+    raise ValueError("Data must be padded to %d byte boundary in CBC mode" % self.block_size)
+ValueError: Data must be padded to 16 byte boundary in CBC mode
+[2021-08-29 15:10:53,129 test_m3u8_downloader.py][line:551] [27016-MainThread-30896:] INFO     ts downloaded result=False
