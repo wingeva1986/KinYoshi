@@ -6,21 +6,17 @@ __all__ = ['iqiyi_m3u8_download', 'IQIYIM3u8Download']
 
 import logging.handlers
 import shutil
-import time
-from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED, FIRST_EXCEPTION
+from concurrent.futures.thread import ThreadPoolExecutor
 from contextlib import suppress
 from pathlib import Path
-import os
+
 import requests
 from Crypto.Cipher import AES
 from func_timeout import FunctionTimedOut, func_set_timeout
 
 log_path = Path(__file__).parent / 'log'
 log_path.mkdir(parents=True, exist_ok=True)
-log_file_path = f"{log_path}/{Path(__file__).stem}.log"
-if not os.access(log_file_path, os.F_OK):
-    os.mknod(log_file_path)
-handler_rotate = logging.handlers.TimedRotatingFileHandler(log_file_path, when="D", interval=1,
+handler_rotate = logging.handlers.TimedRotatingFileHandler(f"utils/log/{Path(__file__).stem}.log", when="D", interval=1,
                                                            encoding='utf-8', backupCount=3)
 handler_rotate.setLevel(logging.INFO)
 formatter = logging.Formatter(
@@ -103,7 +99,8 @@ class IQIYIM3u8Download(object):
             list(zip(range(1, len(urls) + 1), urls)), new_filepath, keys, chunk_size)
         for i in range(5):
             if failures:
-                failures = self._threads_download(failures, new_filepath, keys, chunk_size)
+                failures = self._threads_download(
+                    failures, new_filepath, keys, chunk_size)
         if not failures:
             self._merge_files(dirname_tmp, filepath, wipe_cache)
         return not bool(failures), failures
@@ -168,14 +165,6 @@ class IQIYIM3u8Download(object):
         for result in results:
             if result:
                 failures.append(result)
-        try:
-            wait(results, return_when=FIRST_EXCEPTION)
-            for task in reversed(results):
-                task.cancel()
-            # 等待正在执行任务执行完成
-            wait(results, return_when=ALL_COMPLETED)
-        except Exception as e:
-            logger.warning(e)
         return failures
 
     def _download(self, url, filepath: str, key: str, chunk_size: int):
@@ -192,9 +181,6 @@ class IQIYIM3u8Download(object):
         except (requests.exceptions.RequestException, TSFileHeaderError, FunctionTimedOut) as e:
             logger.warning(f'下载失败: {url}, {index}, {str(e)}')
             return index, url
-        except RuntimeError as e:
-            logger.exception(f'下载超时: {url}, {index}, {e}')
-            raise e
         except Exception as e:
             logger.exception(f'下载异常: {url}, {index}, {e}')
             raise e
@@ -206,7 +192,6 @@ class IQIYIM3u8Download(object):
     def __download(self, url: str, filepath: str, key: str, chunk_size: int):
         # TODO 2020-11-01 ts文件判断，单条链接数据处理
         # file_size = self._get_seed(filepath)
-        error = False
         headers = {
             # 'range': f'bytes={file_size}-',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -216,21 +201,8 @@ class IQIYIM3u8Download(object):
             headers = self.headers
 
         with requests.session() as session:
-            for i in range(5):
-                try:
-                    resp_bytes = session.request(
-                        'get', url, headers=headers, timeout=30).content
-                except Exception as e:
-                    logger.warning(
-                        f"{i + 1},requert url:{url} failed, error:{e}")
-                    time.sleep(1)
-                    if i == 2:
-                        error = True
-                else:
-                    break
-            if error is True:
-                raise RuntimeError(
-                    'Failed to download three times, ending the process')
+            resp_bytes = session.request(
+                'get', url, headers=headers, timeout=30).content
             # resp_bytes bytes长度满足16的倍数
             while True:
                 if len(resp_bytes) % 16 != 0:

@@ -262,25 +262,25 @@ if __name__ == '__main__':
     # db_handle = db.media_asserts_info_iqiyi
 
     # for i in url_list:
-    for i in range(1, 41):
-        url = f'https://www.bilibili.com/video/BV1Cs411f7Xi?p={i}'
-        # url = i["url"]
-        seq_num = f'{i}'
-        # if i < 10:
-        #     seq_num = f'0{i}'
-        # else:
-        #     seq_num = str(i)
-        data = generate_media_assets('家有贱狗国语版', douban_id='3015785', seq_num=seq_num,
-                                     download_url=url, language='普通话', episode_name=f'家有贱狗国语版.{seq_num}')
-        data.pop('download_state')
-        print(data)
-        insert_to_db(db_handle, data)
+    # for i in range(1, 41):
+    #     url = f'https://www.bilibili.com/video/BV1Cs411f7Xi?p={i}'
+    #     # url = i["url"]
+    #     seq_num = f'{i}'
+    #     # if i < 10:
+    #     #     seq_num = f'0{i}'
+    #     # else:
+    #     #     seq_num = str(i)
+    #     data = generate_media_assets('家有贱狗国语版', douban_id='3015785', seq_num=seq_num,
+    #                                  download_url=url, language='普通话', episode_name=f'家有贱狗国语版.{seq_num}')
+    #     data.pop('download_state')
+    #     print(data)
+    #     insert_to_db(db_handle, data)
 
-    name = '猎豹行动国粤双语'
-    douban_id = '4893743'
-    episode_name = '猎豹行动国粤双语'
+    name = '崖上的波妞国粤台日语'
+    douban_id = '1959877'
+    episode_name = '崖上的波妞'
     # insert_tv_series(db_handle, name, douban_id, 22, episode_name=episode_name)
-    # insert_movie_data(db_handle, name, douban_id, episode_name=episode_name)
+    insert_movie_data(db_handle, name, douban_id, episode_name=episode_name)
     # insert_to_db(db_handle, key_m1296215ap)
 
     from Crypto.Cipher import AES

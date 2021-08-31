@@ -49,7 +49,7 @@ class Bde4Downloader(IQIYIM3u8Download):
         for i in range(20):
             if failures:
                 failures = self._threads_download(
-                    failures, new_filepath, keys, chunk_size, sleep_time=2)
+                    failures, new_filepath, keys, chunk_size, sleep_time=5)
         if not failures:
             self._merge_files(dirname_tmp, filepath, wipe_cache)
         return not bool(failures), failures
@@ -101,7 +101,7 @@ class Bde4Downloader(IQIYIM3u8Download):
 
         with requests.session() as session:
             resp_bytes = session.request(
-                'get', url, headers=headers, timeout=120).content
+                'get', url, headers=headers, timeout=120, proxies=get_proxy()).content
             with open(filepath, 'wb') as fwb:
                 if key and self.keys:
                     resp_bytes = self.keys[key].decrypt(resp_bytes)
