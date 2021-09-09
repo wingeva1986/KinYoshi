@@ -256,14 +256,14 @@ if __name__ == '__main__':
     key_map['download_url']['episode_name'] = f"{key_map['name']}.mp4"
     # print(key_map)
 
-    # db_handle = db.hktv_video_info
+    db_handle = db.hktv_video_info
     # db_handle = db.bde4_video_info
-    db_handle = db.bilibili_video_info
+    # db_handle = db.bilibili_video_info
     # db_handle = db.media_asserts_info_iqiyi
 
     # for i in url_list:
     # for i in range(1, 41):
-    #     url = f'https://www.bilibili.com/video/BV1Cs411f7Xi?p={i}'
+    #     url = f'https://www.bilibili.com/video/BV1F4411j7kn?p={i}'
     #     # url = i["url"]
     #     seq_num = f'{i}'
     #     # if i < 10:
@@ -276,11 +276,11 @@ if __name__ == '__main__':
     #     print(data)
     #     insert_to_db(db_handle, data)
 
-    name = '崖上的波妞国粤台日语'
-    douban_id = '1959877'
-    episode_name = '崖上的波妞'
-    # insert_tv_series(db_handle, name, douban_id, 22, episode_name=episode_name)
-    insert_movie_data(db_handle, name, douban_id, episode_name=episode_name)
+    name = '你笑了'
+    douban_id = '4005194'
+    episode_name = name
+    insert_tv_series(db_handle, name, douban_id, 45, episode_name=episode_name)
+    # insert_movie_data(db_handle, name, douban_id, episode_name=episode_name)
     # insert_to_db(db_handle, key_m1296215ap)
 
     from Crypto.Cipher import AES
